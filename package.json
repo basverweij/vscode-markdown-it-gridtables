@@ -10,15 +10,76 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:extension.helloWorld"
+		"onCommand:markdownItGridTables.insertLineAbove",
+		"onCommand:markdownItGridTables.insertLineBelow",
+		"onCommand:markdownItGridTables.insertSeparatorAbove",
+		"onCommand:markdownItGridTables.insertSeparatorBelow"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
 		"markdown.markdownItPlugins": true,
 		"commands": [
 			{
-				"command": "extension.helloWorld",
-				"title": "Hello World"
+				"command": "markdownItGridTables.insertLineAbove",
+				"title": "Insert Line Above"
+			},
+			{
+				"command": "markdownItGridTables.insertLineBelow",
+				"title": "Insert Line Below"
+			},
+			{
+				"command": "markdownItGridTables.insertSeparatorAbove",
+				"title": "Insert Separator Above"
+			},
+			{
+				"command": "markdownItGridTables.insertSeparatorBelow",
+				"title": "Insert Separator Below"
+			}
+		],
+		"menus": {
+			"commandPalette": [
+				{
+					"command": "markdownItGridTables.insertLineAbove",
+					"when": "editorLangId == markdown"
+				},
+				{
+					"command": "markdownItGridTables.insertLineBelow",
+					"when": "editorLangId == markdown"
+				},
+				{
+					"command": "markdownItGridTables.insertSeparatorAbove",
+					"when": "editorLangId == markdown"
+				},
+				{
+					"command": "markdownItGridTables.insertSeparatorBelow",
+					"when": "editorLangId == markdown"
+				}
+			]
+		},
+		"keybindings": [
+			{
+				"command": "markdownItGridTables.insertLineAbove",
+				"key": "ctrl+shift+t l",
+				"mac": "cmd+shift+t l",
+				"when": "editorTextFocus"
+			},
+			{
+				"command": "markdownItGridTables.insertLineBelow",
+				"key": "ctrl+t l",
+				"mac": "cmd+t l",
+				"when": "editorTextFocus"
+			},
+			{
+				"command": "markdownItGridTables.insertSeparatorAbove",
+				"key": "ctrl+shift+t s",
+				"mac": "cmd+shift+t s",
+				"when": "editorTextFocus"
+			},
+			{
+				"command": "markdownItGridTables.insertSeparatorBelow",
+				"key": "ctrl+t s",
+				"mac": "cmd+t s",
+				"when": "editorTextFocus"
 			}
 		]
 	},
