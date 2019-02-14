@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import { DocumentAdapter } from "../common";
-import { getActiveTableColumnWidths } from "../gridtables-structure";
+import { getActiveTableColumnWidths } from "../gridtables";
 
 export function insertLineAboveCommand() {
     insertLine(false);
