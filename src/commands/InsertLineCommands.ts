@@ -29,7 +29,7 @@ function insertLine(
 
     if (columnWidths.length === 0)
     {
-        // TODO show notification
+        vscode.window.showWarningMessage("No active Grid Table found");
         return;
     }
 
