@@ -1,20 +1,24 @@
 import * as vscode from "vscode";
-import { DocumentAdapter } from "../common";
-import { getActiveTableColumnWidths } from "../gridtables";
+import { DocumentAdapter } from "../common/DocumentAdapter";
+import { getActiveTableColumnWidths } from "../gridtables/GetActiveTableColumnWidths";
 
-export function insertSeparatorAbove() {
+export function insertSeparatorAboveCommand()
+{
     insertSeparator(false);
 }
 
-export function insertSeparatorBelow() {
+export function insertSeparatorBelowCommand()
+{
     insertSeparator(true);
 }
 
 function insertSeparator(
-    insertBelow: boolean = false) {
-
+    insertBelow: boolean = false)
+{
     const activeEditor = vscode.window.activeTextEditor;
-    if (!activeEditor) {
+
+    if (!activeEditor)
+    {
         return;
     }
 
@@ -23,7 +27,8 @@ function insertSeparator(
     // get active table column widths
     const columnWidths = getActiveTableColumnWidths(doc);
 
-    if (columnWidths.length === 0) {
+    if (columnWidths.length === 0)
+    {
         // TODO show notification
         return;
     }

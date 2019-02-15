@@ -1,6 +1,7 @@
 import * as vscode from "vscode";
 
-export class FormatTableResult {
+export class FormatTableResult
+{
     edits: vscode.TextEdit[] = [];
 
     numberOfLines: number = 0;
@@ -9,48 +10,57 @@ export class FormatTableResult {
 export function formatTable(
     document: vscode.TextDocument,
     startLine: number):
-    FormatTableResult {
-
+    FormatTableResult
+{
     const result = new FormatTableResult();
 
     // first line determines the column count
     const maxColumnWidths = getColumnWidths(document.lineAt(startLine).text);
 
-    if (maxColumnWidths.length === 0) {
+    if (maxColumnWidths.length === 0)
+    {
         return result;
     }
 
-    for (let i = startLine + 1; i < document.lineCount; i++) {
+    for (let i = startLine + 1; i < document.lineCount; i++)
+    {
         let columnWidths = getColumnWidths(document.lineAt(i).text);
 
-        if (columnWidths.length !== maxColumnWidths.length) {
+        if (columnWidths.length !== maxColumnWidths.length)
+        {
             // column counts don't match -> stop checking
             result.numberOfLines = i - startLine;
             break;
         }
 
         // combine with max column widths
-        for (let j = 0; j < maxColumnWidths.length; j++) {
-            if (maxColumnWidths[j] < columnWidths[j]) {
+        for (let j = 0; j < maxColumnWidths.length; j++)
+        {
+            if (maxColumnWidths[j] < columnWidths[j])
+            {
                 maxColumnWidths[j] = columnWidths[j];
             }
         }
     }
 
     // go through the table again and adjust all lines to the max column widths
-    for (let i = startLine + 1; i < document.lineCount; i++) {
+    for (let i = startLine + 1; i < document.lineCount; i++)
+    {
         const line = document.lineAt(i).text;
 
         let columnWidths = getColumnWidths(line);
 
-        if (columnWidths.length !== maxColumnWidths.length) {
+        if (columnWidths.length !== maxColumnWidths.length)
+        {
             // column counts don't match
             break;
         }
 
         // check against max column widths
-        for (let j = 0; j < maxColumnWidths.length; j++) {
-            if (maxColumnWidths[j] > columnWidths[j]) {
+        for (let j = 0; j < maxColumnWidths.length; j++)
+        {
+            if (maxColumnWidths[j] > columnWidths[j])
+            {
                 // TODO create edit to resize column
 
                 const p = new vscode.Position(i, getNthIndexOf(line, "|", j + 1) - 2);
@@ -69,16 +79,18 @@ export function formatTable(
 
 function getColumnWidths(
     line: string):
-    number[] {
-
-    if (line.startsWith("+")) {
+    number[]
+{
+    if (line.startsWith("+"))
+    {
 
         // try to parse as a row separator line
         let columnMatch = line
             .substr(1)
             .match(/[:-][-]+[:-]\+/g);
 
-        if (columnMatch !== null) {
+        if (columnMatch !== null)
+        {
             return columnMatch.map(s => s.length);
         }
 
@@ -87,17 +99,21 @@ function getColumnWidths(
             .substr(1)
             .match(/[:=][=]+[:=]\+/g);
 
-        if (columnMatch !== null) {
+        if (columnMatch !== null)
+        {
             return columnMatch.map(s => s.length);
         }
-    } else if (line.startsWith("|")) {
+    }
+    else if (line.startsWith("|"))
+    {
 
         // try to parse as a cell line
         const columnMatch = line
             .substr(1)
             .match(/[^|]{3,}\|/g);
 
-        if (columnMatch !== null) {
+        if (columnMatch !== null)
+        {
             return columnMatch.map(s => s.length);
         }
     }
@@ -109,11 +125,13 @@ function getNthIndexOf(
     value: string,
     searchString: string,
     count: number):
-    number {
+    number
+{
 
     let index = value.indexOf(searchString);
 
-    for (let i = 1; i < count; i++) {
+    for (let i = 1; i < count; i++)
+    {
         index = value.indexOf(searchString, index + 1);
     }
 

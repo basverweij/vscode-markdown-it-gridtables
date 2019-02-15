@@ -2,19 +2,21 @@ import * as vscode from "vscode";
 import { IDocument } from "../interfaces/IDocument";
 
 export class DocumentAdapter
-    implements IDocument {
+    implements IDocument
+{
+    constructor(
+        private textEditor: vscode.TextEditor)
+    { }
 
-    constructor(private textEditor: vscode.TextEditor) {
-
-    }
-
-    cursorPosition(): vscode.Position {
+    cursorPosition(): vscode.Position
+    {
         return this.textEditor
             .selection
             .active;
     }
 
-    lineAt(number: number): string {
+    lineAt(number: number): string
+    {
         return this.textEditor
             .document
             .lineAt(number)

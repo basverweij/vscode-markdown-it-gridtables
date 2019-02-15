@@ -9,19 +9,20 @@ import { IDocument } from "../interfaces/IDocument";
  */
 export function getActiveTableColumnWidths(
     doc: IDocument
-): number[] {
-
+): number[]
+{
     const pos = doc.cursorPosition();
 
     // find first table line
-    for (var tableStart = pos.line; tableStart > 0; tableStart--) {
-
+    for (var tableStart = pos.line; tableStart > 0; tableStart--)
+    {
         const firstChar = doc
             .lineAt(tableStart - 1)
             .charAt(0);
 
         if (firstChar !== "|" &&
-            firstChar !== "+") {
+            firstChar !== "+")
+        {
             break;
         }
     }
@@ -29,7 +30,8 @@ export function getActiveTableColumnWidths(
     const startLine = doc.lineAt(tableStart);
 
     // check if we found a (probably) valid start line
-    if (startLine.charAt(0) !== "+") {
+    if (startLine.charAt(0) !== "+")
+    {
         // invalid table
         return [];
     }

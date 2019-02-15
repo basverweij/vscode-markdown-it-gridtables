@@ -1,20 +1,24 @@
 import * as vscode from "vscode";
-import { DocumentAdapter } from "../common";
-import { getActiveTableColumnWidths } from "../gridtables";
+import { DocumentAdapter } from "../common/DocumentAdapter";
+import { getActiveTableColumnWidths } from "../gridtables/GetActiveTableColumnWidths";
 
-export function insertLineAboveCommand() {
+export function insertLineAboveCommand()
+{
     insertLine(false);
 }
 
-export function insertLineBelowCommand() {
+export function insertLineBelowCommand()
+{
     insertLine(true);
 }
 
 function insertLine(
-    insertBelow: boolean = false) {
-
+    insertBelow: boolean = false)
+{
     const activeEditor = vscode.window.activeTextEditor;
-    if (!activeEditor) {
+
+    if (!activeEditor)
+    {
         return;
     }
 
@@ -23,7 +27,8 @@ function insertLine(
     // get active table column widths
     const columnWidths = getActiveTableColumnWidths(doc);
 
-    if (columnWidths.length === 0) {
+    if (columnWidths.length === 0)
+    {
         // TODO show notification
         return;
     }
@@ -31,9 +36,11 @@ function insertLine(
     // find active column
     const pos = activeEditor.selection.active;
 
-    for (var activeCol = 0, c = 0; activeCol < columnWidths.length; activeCol++) {
+    for (var activeCol = 0, c = 0; activeCol < columnWidths.length; activeCol++)
+    {
         c += columnWidths[activeCol];
-        if (c > pos.character) {
+        if (c > pos.character)
+        {
             break;
         }
     }

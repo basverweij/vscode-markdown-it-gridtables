@@ -3,7 +3,8 @@ import { Position } from "vscode";
 /**
  * IDocument defines an abstraction to a text document.
  */
-export interface IDocument {
+export interface IDocument
+{
     /**
      * GetCursorPosition returns the position of the cursor in the document.
      */
