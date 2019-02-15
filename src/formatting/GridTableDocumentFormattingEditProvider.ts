@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 import { formatTable } from "../gridtables/FormatTable";
 
-export class GridTableDocumentFormattingEditProvider
+export default class GridTableDocumentFormattingEditProvider
     implements vscode.DocumentFormattingEditProvider
 {
     provideDocumentFormattingEdits(

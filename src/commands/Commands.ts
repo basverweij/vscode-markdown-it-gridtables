@@ -1,7 +1,7 @@
 import { insertLineAboveCommand, insertLineBelowCommand } from "./InsertLineCommands";
 import { insertSeparatorAboveCommand, insertSeparatorBelowCommand } from "./InsertSeparatorCommands";
 
-enum Commands 
+enum CommandIds 
 {
     InsertLineAbove = "markdownItGridTables.insertLineAbove",
     InsertLineBelow = "markdownItGridTables.insertLineBelow",
@@ -17,12 +17,12 @@ class CommandRegistration
     { }
 }
 
-const CommandRegistrations: CommandRegistration[] =
+const Commands: CommandRegistration[] =
     [
-        new CommandRegistration(Commands.InsertLineAbove, insertLineAboveCommand),
-        new CommandRegistration(Commands.InsertLineBelow, insertLineBelowCommand),
-        new CommandRegistration(Commands.InsertSeparatorAbove, insertSeparatorAboveCommand),
-        new CommandRegistration(Commands.InsertSeparatorBelow, insertSeparatorBelowCommand),
+        new CommandRegistration(CommandIds.InsertLineAbove, insertLineAboveCommand),
+        new CommandRegistration(CommandIds.InsertLineBelow, insertLineBelowCommand),
+        new CommandRegistration(CommandIds.InsertSeparatorAbove, insertSeparatorAboveCommand),
+        new CommandRegistration(CommandIds.InsertSeparatorBelow, insertSeparatorBelowCommand),
     ];
 
-export default CommandRegistrations;
+export default Commands;

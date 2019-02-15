@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
-import { GridTableRulePlugin } from "markdown-it-gridtables";
 import Commands from "./commands/Commands";
-import { GridTableDocumentFormattingEditProvider } from "./formatting/GridTableDocumentFormattingEditProvider";
+import Formatters from "./formatting/Formatters";
+import Plugins from "./markdown/Plugins";
 
 export function activate(
 	context: vscode.ExtensionContext)
@@ -13,17 +13,24 @@ export function activate(
 				cmd.command,
 				cmd.callback)));
 
-	// add formatting support
-	context.subscriptions.push(
-		vscode.languages.registerDocumentFormattingEditProvider(
-			"markdown",
-			new GridTableDocumentFormattingEditProvider()));
+	// register formatters
+	Formatters.forEach(fmt =>
+		context.subscriptions.push(
+			vscode.languages.registerDocumentFormattingEditProvider(
+				fmt.selector,
+				fmt.provider)));
 
 	return {
 		extendMarkdownIt(
 			md: any)
 		{
-			return md.use(GridTableRulePlugin);
+			// register plugins
+			Plugins.forEach(plg =>
+			{
+				md = md.use(plg);
+			});
+
+			return md;
 		}
 	};
 }
