@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { formatTable } from "../gridtables/FormatTable";
+import formatTable from "../gridtables/FormatTable";
 
 export default class GridTableDocumentFormattingEditProvider
     implements vscode.DocumentFormattingEditProvider
@@ -15,6 +15,11 @@ export default class GridTableDocumentFormattingEditProvider
         // find all tables
         for (let i = 0; i < document.lineCount; i++)
         {
+            if (token.isCancellationRequested)
+            {
+                break;
+            }
+
             if (document.lineAt(i).text.startsWith("+-"))
             {
                 // could be a grid table
