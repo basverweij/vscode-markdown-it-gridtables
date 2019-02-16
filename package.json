@@ -13,7 +13,8 @@
 		"onCommand:markdownItGridTables.insertLineAbove",
 		"onCommand:markdownItGridTables.insertLineBelow",
 		"onCommand:markdownItGridTables.insertSeparatorAbove",
-		"onCommand:markdownItGridTables.insertSeparatorBelow"
+		"onCommand:markdownItGridTables.insertSeparatorBelow",
+		"onCommand:markdownItGridTables.cellNewline"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
@@ -34,6 +35,10 @@
 			{
 				"command": "markdownItGridTables.insertSeparatorBelow",
 				"title": "Insert Separator Below"
+			},
+			{
+				"command": "markdownItGridTables.cellNewline",
+				"title": "Insert Cell Newline"
 			}
 		],
 		"menus": {
@@ -52,6 +57,10 @@
 				},
 				{
 					"command": "markdownItGridTables.insertSeparatorBelow",
+					"when": "editorLangId == markdown"
+				},
+				{
+					"command": "markdownItGridTables.cellNewline",
 					"when": "editorLangId == markdown"
 				}
 			]
@@ -79,6 +88,11 @@
 				"command": "markdownItGridTables.insertSeparatorBelow",
 				"key": "ctrl+t s",
 				"mac": "cmd+t s",
+				"when": "editorTextFocus"
+			},
+			{
+				"command": "markdownItGridTables.cellNewline",
+				"key": "enter",
 				"when": "editorTextFocus"
 			}
 		]

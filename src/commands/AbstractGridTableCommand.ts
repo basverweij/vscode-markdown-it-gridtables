@@ -18,7 +18,8 @@ export default abstract class AbstractGridTableCommand
 
         if (this.columnWidths.length === 0)
         {
-            vscode.window.showWarningMessage("No active Grid Table found");
+            this.internalNotInGridTable();
+
             return;
         }
 
@@ -26,6 +27,11 @@ export default abstract class AbstractGridTableCommand
     }
 
     protected abstract internalExecute(): void;
+
+    protected internalNotInGridTable(): void
+    {
+        vscode.window.showWarningMessage("Not in a Grid Table");
+    }
 
     protected position(): vscode.Position
     {

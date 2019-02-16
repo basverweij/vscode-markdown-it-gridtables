@@ -2,6 +2,8 @@ import * as vscode from 'vscode';
 import AbstractInsertCommand from './AbstractInsertCommand';
 import InsertLineCommand from "./InsertLineCommand";
 import InsertSeparatorCommand from './InsertSeparatorCommand';
+import AbstractGridTableCommand from './AbstractGridTableCommand';
+import CellNewlineCommand from './CellNewlineCommand';
 
 enum CommandIds 
 {
@@ -9,6 +11,7 @@ enum CommandIds
     InsertLineBelow = "markdownItGridTables.insertLineBelow",
     InsertSeparatorAbove = "markdownItGridTables.insertSeparatorAbove",
     InsertSeparatorBelow = "markdownItGridTables.insertSeparatorBelow",
+    InsertCellNewline = "markdownItGridTables.cellNewline",
 }
 
 type TCallback = (...args: any[]) => any;
@@ -39,14 +42,41 @@ const Commands: CommandRegistration[] =
         new CommandRegistration(
             CommandIds.InsertSeparatorBelow,
             buildInsertCommand(InsertSeparatorCommand, true)),
+
+        new CommandRegistration(
+            CommandIds.InsertCellNewline,
+            buildCommand(CellNewlineCommand)),
     ];
 
 export default Commands;
 
+function buildCommand<T extends AbstractGridTableCommand>(
+    TCommand: new (editor: vscode.TextEditor) => T
+): TCallback
+{
+    return () =>
+    {
+        // get active text editor
+        const editor = vscode
+            .window
+            .activeTextEditor;
+
+        if (!editor)
+        {
+            return;
+        }
+
+        // execute command
+        const cmd = new TCommand(editor);
+
+        cmd.execute();
+    }
+}
+
 function buildInsertCommand<T extends AbstractInsertCommand>(
     TCommand: new (editor: vscode.TextEditor, insertBelow: boolean) => T,
-    insertBelow: boolean):
-    TCallback
+    insertBelow: boolean
+): TCallback
 {
     return () =>
     {
