@@ -1,5 +1,7 @@
 import * as vscode from "vscode";
 import ITextDocument from "../interfaces/ITextDocument";
+import getColumnWidths from "../common/GetColumnWidths";
+import nthIndexOf from "../common/NthIndexOf";
 
 export default function formatTable(
     document: ITextDocument,
@@ -92,7 +94,7 @@ export default function formatTable(
             if (columnChar === "|")
             {
                 // get cell start position
-                const k = getNthIndexOf(
+                const k = nthIndexOf(
                     line,
                     columnChar, j + 1)
                     + 1;
@@ -109,7 +111,7 @@ export default function formatTable(
             }
 
             // get cell end position
-            const k = getNthIndexOf(
+            const k = nthIndexOf(
                 line,
                 columnChar, j + 2) -
                 (columnChar === "|" ?
@@ -142,92 +144,4 @@ export default function formatTable(
     }
 
     return linesScanned;
-}
-
-function getColumnWidths(
-    line: string,
-    trimCells: boolean = false):
-    number[]
-{
-    if (line.startsWith("+"))
-    {
-        // try to parse as a row separator line
-        let columnMatch = line
-            .substr(1)
-            .match(/[:-][-]+[:-]\+/g);
-
-        if (columnMatch !== null)
-        {
-            return columnMatch.map(s => s.length);
-        }
-
-        // try to parse as a header separator line
-        columnMatch = line
-            .substr(1)
-            .match(/[:=][=]+[:=]\+/g);
-
-        if (columnMatch !== null)
-        {
-            return columnMatch.map(s => s.length);
-        }
-    }
-    else if (line.startsWith("|"))
-    {
-        // try to parse as a cell line
-        let columnMatch = line
-            .substr(1)
-            .match(/[^|]+\|/g);
-
-        if (columnMatch !== null)
-        {
-            // ensure that each cell starts with a space
-            columnMatch = columnMatch.map(s =>
-                s.startsWith(" ") ?
-                    s :
-                    " " + s);
-
-            if (trimCells)
-            {
-                columnMatch = columnMatch.map(s =>
-                {
-                    if (s.length > 1)
-                    {
-                        // skip first char (always a space),
-                        // and last char (always a vertical pipe),
-                        // trim the rest from the right
-                        s = s
-                            .substr(1, s.length - 2)
-                            .trimRight();
-                    }
-
-                    if (s.length < 1)
-                    {
-                        s = " ";
-                    }
-
-                    return " " + s + " |";
-                });
-            }
-
-            return columnMatch.map(s => s.length);
-        }
-    }
-
-    return [];
-}
-
-function getNthIndexOf(
-    value: string,
-    searchString: string,
-    nth: number = 1):
-    number
-{
-    let index = value.indexOf(searchString);
-
-    for (let i = 1; i < nth; i++)
-    {
-        index = value.indexOf(searchString, index + 1);
-    }
-
-    return index;
 }
