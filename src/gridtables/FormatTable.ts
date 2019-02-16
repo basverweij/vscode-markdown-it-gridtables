@@ -3,11 +3,10 @@ import ITextDocument from "../interfaces/ITextDocument";
 
 export default function formatTable(
     document: ITextDocument,
-    startLine: number):
-    FormatTableResult
+    startLine: number,
+    aggregator: (item: vscode.TextEdit) => void):
+    number
 {
-    const result = new FormatTableResult();
-
     // first line determines the column count,
     // and does not need to be trimmed as it is always a separator line,
     // minimum width is always 3
@@ -19,8 +18,10 @@ export default function formatTable(
 
     if (maxColumnWidths.length === 0)
     {
-        return result;
+        return 0;
     }
+
+    let linesScanned = 0;
 
     for (let i = startLine + 1; i < document.lineCount; i++)
     {
@@ -34,7 +35,7 @@ export default function formatTable(
         if (columnWidths.length !== maxColumnWidths.length)
         {
             // column counts don't match -> stop checking
-            result.numberOfLines = i - startLine;
+            linesScanned = i - startLine;
 
             break;
         }
@@ -56,7 +57,7 @@ export default function formatTable(
     }
 
     // go through the table again and adjust all lines to the max column widths
-    for (let i = startLine; i < startLine + result.numberOfLines; i++)
+    for (let i = startLine; i < startLine + linesScanned; i++)
     {
         const line = document
             .lineAt(i)
@@ -91,23 +92,29 @@ export default function formatTable(
             if (columnChar === "|")
             {
                 // get cell start position
-                const k = getNthIndexOf(line, columnChar, j + 1) + 1;
+                const k = getNthIndexOf(
+                    line,
+                    columnChar, j + 1)
+                    + 1;
 
                 if (line.charAt(k) !== " ")
                 {
                     // ensure space at beginning of cell
                     const p = new vscode.Position(i, k);
 
-                    result.edits.push(
-                        vscode.TextEdit.insert(p, " "));
+                    aggregator(
+                        vscode.TextEdit
+                            .insert(p, " "));
                 }
             }
 
             // get cell end position
-            const k = getNthIndexOf(line, columnChar, j + 2) -
+            const k = getNthIndexOf(
+                line,
+                columnChar, j + 2) -
                 (columnChar === "|" ?
                     0 :
-                    1); // skip possible alignment indicator
+                    1); // skip optional alignment indicator
 
             if (maxColumnWidths[j] > columnWidths[j])
             {
@@ -115,8 +122,9 @@ export default function formatTable(
 
                 const s = insertChar.repeat(maxColumnWidths[j] - columnWidths[j]);
 
-                result.edits.push(
-                    vscode.TextEdit.insert(p, s));
+                aggregator(
+                    vscode.TextEdit
+                        .insert(p, s));
             }
             else if (maxColumnWidths[j] < columnWidths[j])
             {
@@ -126,20 +134,14 @@ export default function formatTable(
 
                 const e = new vscode.Position(i, k);
 
-                result.edits.push(
-                    vscode.TextEdit.delete(new vscode.Range(s, e)));
+                aggregator(
+                    vscode.TextEdit
+                        .delete(new vscode.Range(s, e)));
             }
         }
     }
 
-    return result;
-}
-
-class FormatTableResult
-{
-    edits: vscode.TextEdit[] = [];
-
-    numberOfLines: number = 0;
+    return linesScanned;
 }
 
 function getColumnWidths(

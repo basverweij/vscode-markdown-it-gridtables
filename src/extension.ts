@@ -2,6 +2,7 @@ import * as vscode from "vscode";
 import Commands from "./commands/Commands";
 import Formatters from "./formatting/Formatters";
 import Plugins from "./markdown/Plugins";
+import Folders from "./folding/Folders";
 
 export function activate(
 	context: vscode.ExtensionContext)
@@ -19,6 +20,13 @@ export function activate(
 			vscode.languages.registerDocumentFormattingEditProvider(
 				fmt.selector,
 				fmt.provider)));
+
+	// register folders
+	Folders.forEach(fld =>
+		context.subscriptions.push(
+			vscode.languages.registerFoldingRangeProvider(
+				fld.selector,
+				fld.provider)));
 
 	return {
 		extendMarkdownIt(

@@ -1,10 +1,6 @@
 import { DocumentSelector, DocumentFormattingEditProvider } from "vscode";
 import GridTableDocumentFormattingEditProvider from "./GridTableDocumentFormattingEditProvider";
-
-enum Languages
-{
-    Markdown = "markdown",
-}
+import Languages from "../common/Languages";
 
 class FormatterRegistration
 {
