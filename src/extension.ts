@@ -3,6 +3,7 @@ import Commands from "./commands/Commands";
 import Formatters from "./formatting/Formatters";
 import Plugins from "./markdown/Plugins";
 import Folders from "./folding/Folders";
+import RangeFormatters from "./formatting/RangeFormatters";
 
 export function activate(
 	context: vscode.ExtensionContext)
@@ -18,6 +19,12 @@ export function activate(
 	Formatters.forEach(fmt =>
 		context.subscriptions.push(
 			vscode.languages.registerDocumentFormattingEditProvider(
+				fmt.selector,
+				fmt.provider)));
+
+	RangeFormatters.forEach(fmt =>
+		context.subscriptions.push(
+			vscode.languages.registerDocumentRangeFormattingEditProvider(
 				fmt.selector,
 				fmt.provider)));
 

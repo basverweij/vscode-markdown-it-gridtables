@@ -1,5 +1,5 @@
 import { DocumentSelector, FoldingRangeProvider } from "vscode";
-import GridTableFoldingRangeProvider from "./GridTableFoldingRangeProvider.1";
+import GridTableFoldingRangeProvider from "./GridTableFoldingRangeProvider";
 import Languages from "../common/Languages";
 
 class FolderRegistration
