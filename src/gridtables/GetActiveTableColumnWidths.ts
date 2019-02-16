@@ -1,5 +1,6 @@
 import { getColumnWidths } from "markdown-it-gridtables";
-import { IDocument } from "../interfaces/IDocument";
+import ITextDocument from "../interfaces/ITextDocument";
+import IPosition from "../interfaces/IPosition";
 
 /**
  * getActiveTableColumnWidths returns the widths of the columns in the active 
@@ -7,17 +8,17 @@ import { IDocument } from "../interfaces/IDocument";
  * 
  * @param doc The document in which to search for the active table.
  */
-export function getActiveTableColumnWidths(
-    doc: IDocument
+export default function getActiveTableColumnWidths(
+    doc: ITextDocument,
+    pos: IPosition
 ): number[]
 {
-    const pos = doc.cursorPosition();
-
     // find first table line
     for (var tableStart = pos.line; tableStart > 0; tableStart--)
     {
         const firstChar = doc
             .lineAt(tableStart - 1)
+            .text
             .charAt(0);
 
         if (firstChar !== "|" &&
@@ -27,7 +28,9 @@ export function getActiveTableColumnWidths(
         }
     }
 
-    const startLine = doc.lineAt(tableStart);
+    const startLine = doc
+        .lineAt(tableStart)
+        .text;
 
     // check if we found a (probably) valid start line
     if (startLine.charAt(0) !== "+")

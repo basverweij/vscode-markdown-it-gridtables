@@ -1,5 +1,7 @@
-import { insertLineAboveCommand, insertLineBelowCommand } from "./InsertLineCommands";
-import { insertSeparatorAboveCommand, insertSeparatorBelowCommand } from "./InsertSeparatorCommands";
+import * as vscode from 'vscode';
+import AbstractInsertCommand from './AbstractInsertCommand';
+import InsertLineCommand from "./InsertLineCommand";
+import InsertSeparatorCommand from './InsertSeparatorCommand';
 
 enum CommandIds 
 {
@@ -9,20 +11,60 @@ enum CommandIds
     InsertSeparatorBelow = "markdownItGridTables.insertSeparatorBelow",
 }
 
+type TCallback = (...args: any[]) => any;
+
 class CommandRegistration
 {
     constructor(
         public command: string,
-        public callback: (...args: any[]) => any)
+        public callback: TCallback)
     { }
 }
 
 const Commands: CommandRegistration[] =
     [
-        new CommandRegistration(CommandIds.InsertLineAbove, insertLineAboveCommand),
-        new CommandRegistration(CommandIds.InsertLineBelow, insertLineBelowCommand),
-        new CommandRegistration(CommandIds.InsertSeparatorAbove, insertSeparatorAboveCommand),
-        new CommandRegistration(CommandIds.InsertSeparatorBelow, insertSeparatorBelowCommand),
+        new CommandRegistration(
+            CommandIds.InsertLineAbove,
+            buildInsertCommand(InsertLineCommand, false)
+        ),
+
+        new CommandRegistration(
+            CommandIds.InsertLineBelow,
+            buildInsertCommand(InsertLineCommand, true)),
+
+        new CommandRegistration(
+            CommandIds.InsertSeparatorAbove,
+            buildInsertCommand(InsertSeparatorCommand, false)),
+
+        new CommandRegistration(
+            CommandIds.InsertSeparatorBelow,
+            buildInsertCommand(InsertSeparatorCommand, true)),
     ];
 
 export default Commands;
+
+function buildInsertCommand<T extends AbstractInsertCommand>(
+    TCommand: new (editor: vscode.TextEditor, insertBelow: boolean) => T,
+    insertBelow: boolean):
+    TCallback
+{
+    return () =>
+    {
+        // get active text editor
+        const editor = vscode
+            .window
+            .activeTextEditor;
+
+        if (!editor)
+        {
+            return;
+        }
+
+        // execute command
+        const cmd = new TCommand(
+            editor,
+            insertBelow);
+
+        cmd.execute();
+    }
+}

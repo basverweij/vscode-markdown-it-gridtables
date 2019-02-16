@@ -1,7 +1,8 @@
 import * as vscode from "vscode";
+import ITextDocument from "../interfaces/ITextDocument";
 
 export default function formatTable(
-    document: vscode.TextDocument,
+    document: ITextDocument,
     startLine: number):
     FormatTableResult
 {
