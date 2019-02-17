@@ -1,7 +1,6 @@
 import * as vscode from "vscode";
 import AbstractGridTableCommand from "./AbstractGridTableCommand";
 import nthIndexOf from "../common/NthIndexOf";
-import { posix } from "path";
 
 export default class CellNewlineCommand
     extends AbstractGridTableCommand
