@@ -1,72 +1,131 @@
 import * as vscode from "vscode";
 import AbstractGridTableCommand from "./AbstractGridTableCommand";
+import nthIndexOf from "../common/NthIndexOf";
+import { posix } from "path";
 
 export default class CellNewlineCommand
     extends AbstractGridTableCommand
 {
     protected internalExecute(): void
     {
-        const cellLine = this.columnWidths
-            .map(w => "|" + " ".repeat(w - 1))
-            .join("") +
-            "|\n";
+        const pos = this.position();
 
         const activeCol = this.activeColumn();
 
-        let character = 2;
-
-        for (let i = 0; i < activeCol; i++)
+        if (this.shouldInsertCellLine(pos, activeCol))
         {
-            character += this.columnWidths[i];
+            // insert cell new line
+            const cellLine = this.columnWidths
+                .map(w => "|" + " ".repeat(w - 1))
+                .join("") +
+                "|\n";
+
+            this.insertText(
+                cellLine,
+                pos.line + 1,
+                0);
         }
 
-        this.insertAndMove(
-            cellLine,
-            1, 0,
-            1, character,
-            this.columnWidths[activeCol] - 3);
+        // get column start character
+        const line = this.editor
+            .document
+            .lineAt(pos.line)
+            .text;
+
+        let fromCharacter = nthIndexOf(
+            line,
+            "|",
+            activeCol + 1)
+            + 2;
+
+        let toCharacter = nthIndexOf(
+            line,
+            "|",
+            activeCol + 2)
+            - 1;
+
+        this.select(
+            pos.line + 1,
+            fromCharacter,
+            toCharacter - fromCharacter);
     }
 
     protected internalNotInGridTable(): void
     {
-        this.insertAndMove(
-            "\n",
-            0, -1,
-            1, 0);
-    }
-
-    private insertAndMove(
-        value: string,
-        insertLineOffset: number,
-        insertCharacter: number,
-        selectionLineOffset: number,
-        selectionCharacter: number,
-        selectionWidth: number = 0)
-    {
         const pos = this.position();
 
-        if (insertCharacter < 0)
+        this.insertText(
+            "\n",
+            pos.line,
+            pos.character);
+
+        this.select(
+            pos.line + 1,
+            0);
+    }
+
+    private shouldInsertCellLine(
+        pos: vscode.Position,
+        activeCol: number
+    ): boolean
+    {
+        if (pos.line === this.editor.document.lineCount - 1)
         {
-            insertCharacter = pos.character;
+            // last line
+            return true;
         }
 
+        const nextLine = this.editor
+            .document
+            .lineAt(pos.line + 1)
+            .text;
+
+        if (!nextLine.startsWith("|"))
+        {
+            // next line is not a cell line
+            return true;
+        }
+
+        const nextColumn = nextLine
+            .substring(
+                nthIndexOf(nextLine, "|", activeCol + 1) + 1,
+                nthIndexOf(nextLine, "|", activeCol + 2) - 1,
+            )
+            .trim();
+
+        // next line is not empty
+        return nextColumn !== "";
+    }
+
+    private insertText(
+        text: string,
+        line: number,
+        character: number)
+    {
         this.editor.edit((editBuilder: vscode.TextEditorEdit) =>
         {
             editBuilder.insert(
                 new vscode.Position(
-                    pos.line + insertLineOffset,
-                    insertCharacter),
-                value);
+                    line,
+                    character),
+                text);
         });
+    }
 
-        const s = new vscode.Position(
-            pos.line + selectionLineOffset,
-            selectionCharacter);
+    private select(
+        line: number,
+        character: number,
+        width: number = 0)
+    {
+        // start at the end, so that the cursor is positioned correctly
+        const from = new vscode.Position(
+            line,
+            character + width);
 
-        const e = new vscode.Position(
-            pos.line + selectionLineOffset,
-            selectionCharacter + selectionWidth);
+        const to = new vscode.Position(
+            line,
+            character);
 
-        this.editor.selection = new vscode.Selection(e, s);
+        this.editor.selection = new vscode.Selection(from, to);
     }
 }

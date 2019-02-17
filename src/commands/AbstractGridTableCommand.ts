@@ -44,16 +44,14 @@ export default abstract class AbstractGridTableCommand
     {
         const pos = this.position();
 
-        for (var i = 0, c = 0; i < this.columnWidths.length; i++)
-        {
-            c += this.columnWidths[i];
+        const line = this.editor
+            .document
+            .lineAt(pos.line)
+            .text;
 
-            if (c > pos.character)
-            {
-                break;
-            }
-        }
-
-        return i;
+        return line
+            .substr(0, pos.character)
+            .split("|")
+            .length - 2;
     }
 }
