@@ -1,6 +1,6 @@
 import { DocumentSelector, FoldingRangeProvider } from "vscode";
 import GridTableFoldingRangeProvider from "./GridTableFoldingRangeProvider";
-import Languages from "../common/Languages";
+import MarkdownDocumentFilter from "../common/MarkdownDocumentFilter";
 
 class FolderRegistration
 {
@@ -13,7 +13,7 @@ class FolderRegistration
 const Folders: FolderRegistration[] =
     [
         new FolderRegistration(
-            Languages.Markdown,
+            MarkdownDocumentFilter,
             new GridTableFoldingRangeProvider()),
     ];
 

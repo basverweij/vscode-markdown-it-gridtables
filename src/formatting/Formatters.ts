@@ -1,6 +1,6 @@
 import { DocumentSelector, DocumentFormattingEditProvider } from "vscode";
 import GridTableDocumentFormattingEditProvider from "./GridTableDocumentFormattingEditProvider";
-import Languages from "../common/Languages";
+import MarkdownDocumentFilter from "../common/MarkdownDocumentFilter";
 
 class FormatterRegistration
 {
@@ -13,7 +13,7 @@ class FormatterRegistration
 const Formatters: FormatterRegistration[] =
     [
         new FormatterRegistration(
-            Languages.Markdown,
+            MarkdownDocumentFilter,
             new GridTableDocumentFormattingEditProvider()),
     ];
 

@@ -1,6 +1,6 @@
 import { DocumentSelector, DocumentRangeFormattingEditProvider } from "vscode";
-import Languages from "../common/Languages";
 import GridTableDocumentRangeFormattingEditProvider from "./GridTableDocumentRangeFormattingEditProvider";
+import MarkdownDocumentFilter from "../common/MarkdownDocumentFilter";
 
 class RangeFormatterRegistration
 {
@@ -13,7 +13,7 @@ class RangeFormatterRegistration
 const RangeFormatters: RangeFormatterRegistration[] =
     [
         new RangeFormatterRegistration(
-            Languages.Markdown,
+            MarkdownDocumentFilter,
             new GridTableDocumentRangeFormattingEditProvider()),
     ];
 
