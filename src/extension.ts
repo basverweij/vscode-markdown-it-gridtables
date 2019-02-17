@@ -1,8 +1,7 @@
 import * as vscode from "vscode";
 import Commands from "./commands/Commands";
-import Formatters from "./formatting/Formatters";
-import Plugins from "./markdown/Plugins";
 import Folders from "./folding/Folders";
+import Plugins from "./markdown/Plugins";
 import RangeFormatters from "./formatting/RangeFormatters";
 
 export function activate(
@@ -16,12 +15,6 @@ export function activate(
 				cmd.callback)));
 
 	// register formatters
-	Formatters.forEach(fmt =>
-		context.subscriptions.push(
-			vscode.languages.registerDocumentFormattingEditProvider(
-				fmt.selector,
-				fmt.provider)));
-
 	RangeFormatters.forEach(fmt =>
 		context.subscriptions.push(
 			vscode.languages.registerDocumentRangeFormattingEditProvider(
