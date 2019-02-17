@@ -1,6 +1,6 @@
-import { getColumnWidths } from "markdown-it-gridtables";
 import ITextDocument from "../interfaces/ITextDocument";
 import IPosition from "../interfaces/IPosition";
+import getColumnWidths from "../common/GetColumnWidths";
 
 /**
  * getActiveTableColumnWidths returns the widths of the columns in the active 
