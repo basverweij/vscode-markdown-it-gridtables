@@ -6,7 +6,7 @@ export default class InsertTableCommand
 {
     protected internalExecute(): void
     {
-        vscode.window.showWarningMessage("In a Grid Table");
+        this.warning("In a Grid Table");
     }
 
     protected internalNotInGridTable(): void

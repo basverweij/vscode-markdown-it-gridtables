@@ -30,7 +30,14 @@ export default abstract class AbstractGridTableCommand
 
     protected internalNotInGridTable(): void
     {
-        vscode.window.showWarningMessage("Not in a Grid Table");
+        this.warning("Not in a Grid Table");
+    }
+
+    protected warning(
+        message: string
+    )
+    {
+        vscode.window.showWarningMessage(message);
     }
 
     protected position(): vscode.Position

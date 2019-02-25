@@ -5,6 +5,7 @@ import InsertSeparatorCommand from './InsertSeparatorCommand';
 import AbstractGridTableCommand from './AbstractGridTableCommand';
 import CellNewlineCommand from './CellNewlineCommand';
 import InsertTableCommand from './InsertTableCommand';
+import ToggleHeaderCommand from './ToggleHeaderCommand';
 
 enum CommandIds 
 {
@@ -14,6 +15,7 @@ enum CommandIds
     InsertSeparatorBelow = "markdownItGridTables.insertSeparatorBelow",
     InsertCellNewline = "markdownItGridTables.cellNewline",
     InsertTable = "markdownItGridTables.insertTable",
+    ToggleHeader = "markdownItGridTables.toggleHeader",
 }
 
 type TCallback = (...args: any[]) => any;
@@ -52,6 +54,10 @@ const Commands: CommandRegistration[] =
         new CommandRegistration(
             CommandIds.InsertTable,
             buildCommand(InsertTableCommand)),
+
+        new CommandRegistration(
+            CommandIds.ToggleHeader,
+            buildCommand(ToggleHeaderCommand)),
     ];
 
 export default Commands;

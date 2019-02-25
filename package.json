@@ -15,7 +15,8 @@
 		"onCommand:markdownItGridTables.insertSeparatorAbove",
 		"onCommand:markdownItGridTables.insertSeparatorBelow",
 		"onCommand:markdownItGridTables.cellNewline",
-		"onCommand:markdownItGridTables.insertTable"
+		"onCommand:markdownItGridTables.insertTable",
+		"onCommand:markdownItGridTables.toggleHeader"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
@@ -44,6 +45,10 @@
 			{
 				"command": "markdownItGridTables.insertTable",
 				"title": "Insert Table"
+			},
+			{
+				"command": "markdownItGridTables.toggleHeader",
+				"title": "Toggle Header"
 			}
 		],
 		"menus": {
@@ -70,6 +75,10 @@
 				},
 				{
 					"command": "markdownItGridTables.insertTable",
+					"when": "editorLangId == markdown"
+				},
+				{
+					"command": "markdownItGridTables.toggleHeader",
 					"when": "editorLangId == markdown"
 				}
 			]
@@ -107,6 +116,11 @@
 			{
 				"command": "markdownItGridTables.insertTable",
 				"key": "ctrl+t t",
+				"when": "editorTextFocus"
+			},
+			{
+				"command": "markdownItGridTables.toggleHeader",
+				"key": "ctrl+t h",
 				"when": "editorTextFocus"
 			}
 		]
