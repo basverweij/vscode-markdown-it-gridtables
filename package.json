@@ -16,7 +16,11 @@
 		"onCommand:markdownItGridTables.insertSeparatorBelow",
 		"onCommand:markdownItGridTables.cellNewline",
 		"onCommand:markdownItGridTables.insertTable",
-		"onCommand:markdownItGridTables.toggleHeader"
+		"onCommand:markdownItGridTables.toggleHeader",
+		"markdownItGridTables.setColumnAlignmentLeft",
+		"markdownItGridTables.setColumnAlignmentCenter",
+		"markdownItGridTables.setColumnAlignmentRight",
+		"markdownItGridTables.setColumnAlignmentNone"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
@@ -49,6 +53,22 @@
 			{
 				"command": "markdownItGridTables.toggleHeader",
 				"title": "Toggle Header"
+			},
+			{
+				"command": "markdownItGridTables.setColumnAlignmentLeft",
+				"title": "Set Column Alignment: Left"
+			},
+			{
+				"command": "markdownItGridTables.setColumnAlignmentCenter",
+				"title": "Set Column Alignment: Center"
+			},
+			{
+				"command": "markdownItGridTables.setColumnAlignmentRight",
+				"title": "Set Column Alignment: Right"
+			},
+			{
+				"command": "markdownItGridTables.setColumnAlignmentNone",
+				"title": "Set Column Alignment: None"
 			}
 		],
 		"menus": {
@@ -79,6 +99,22 @@
 				},
 				{
 					"command": "markdownItGridTables.toggleHeader",
+					"when": "editorLangId == markdown"
+				},
+				{
+					"command": "markdownItGridTables.setColumnAlignmentLeft",
+					"when": "editorLangId == markdown"
+				},
+				{
+					"command": "markdownItGridTables.setColumnAlignmentCenter",
+					"when": "editorLangId == markdown"
+				},
+				{
+					"command": "markdownItGridTables.setColumnAlignmentRight",
+					"when": "editorLangId == markdown"
+				},
+				{
+					"command": "markdownItGridTables.setColumnAlignmentNone",
 					"when": "editorLangId == markdown"
 				}
 			]
@@ -121,6 +157,26 @@
 			{
 				"command": "markdownItGridTables.toggleHeader",
 				"key": "ctrl+t h",
+				"when": "editorTextFocus"
+			},
+			{
+				"command": "markdownItGridTables.setColumnAlignmentLeft",
+				"key": "ctrl+t ctrl+l",
+				"when": "editorTextFocus"
+			},
+			{
+				"command": "markdownItGridTables.setColumnAlignmentCenter",
+				"key": "ctrl+t ctrl+c",
+				"when": "editorTextFocus"
+			},
+			{
+				"command": "markdownItGridTables.setColumnAlignmentRight",
+				"key": "ctrl+t ctrl+r",
+				"when": "editorTextFocus"
+			},
+			{
+				"command": "markdownItGridTables.setColumnAlignmentNone",
+				"key": "ctrl+t ctrl+n",
 				"when": "editorTextFocus"
 			}
 		]

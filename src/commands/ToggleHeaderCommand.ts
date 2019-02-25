@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 import AbstractGridTableCommand from "./AbstractGridTableCommand";
 import getTableStartLine from "../gridtables/GetTableStartLine";
-import { start } from "repl";
+import getTableHeaderLine from "../gridtables/GetTableHeaderLine";
 
 export default class ToggleHeaderCommand
     extends AbstractGridTableCommand
@@ -10,13 +10,11 @@ export default class ToggleHeaderCommand
     {
         const doc = this.editor.document;
 
-        const pos = this.position();
-
-        const tableStart = getTableStartLine(
+        const startLineNumber = getTableStartLine(
             doc,
-            pos);
+            this.position());
 
-        if (tableStart === -1)
+        if (startLineNumber === -1)
         {
             // invalid table
             this.warning("Table start line not found");
@@ -24,35 +22,34 @@ export default class ToggleHeaderCommand
             return;
         }
 
-        for (let i = tableStart + 2; i < doc.lineCount; i++)
+        const headerLineNumber = getTableHeaderLine(
+            doc,
+            startLineNumber);
+
+        if (headerLineNumber === -1)
         {
-            const line = doc
-                .lineAt(i)
-                .text;
+            // header line not found
+            this.warning("Table header line not found");
 
-            if (line.startsWith("+"))
-            {
-                // first separator line after the table start line
-                this.toggleHeader(
-                    doc,
-                    tableStart,
-                    i,
-                    line);
-
-                return;
-            }
+            return;
         }
 
-        this.warning("Table header line not found");
+        this.toggleHeader(
+            doc,
+            startLineNumber,
+            headerLineNumber);
     }
 
     private toggleHeader(
         doc: vscode.TextDocument,
         startLineNumber: number,
-        headerLineNumber: number,
-        headerLine: string)
+        headerLineNumber: number)
     {
         const replacements: LineReplacement[] = [];
+
+        const headerLine = doc
+            .lineAt(headerLineNumber)
+            .text;
 
         if (headerLine.indexOf("=") >= 0)
         {

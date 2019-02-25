@@ -56,9 +56,14 @@ export default abstract class AbstractGridTableCommand
             .lineAt(pos.line)
             .text;
 
+        const splitChar =
+            line.startsWith("+") ?
+                "+" :
+                "|";
+
         return line
             .substr(0, pos.character)
-            .split("|")
+            .split(splitChar)
             .length - 2;
     }
 }

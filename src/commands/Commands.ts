@@ -6,6 +6,8 @@ import AbstractGridTableCommand from './AbstractGridTableCommand';
 import CellNewlineCommand from './CellNewlineCommand';
 import InsertTableCommand from './InsertTableCommand';
 import ToggleHeaderCommand from './ToggleHeaderCommand';
+import SetColumnAlignmentCommand from './SetColumnAlignmentCommand';
+import ColumnAlignments from '../common/ColumnAlignments';
 
 enum CommandIds 
 {
@@ -16,6 +18,10 @@ enum CommandIds
     InsertCellNewline = "markdownItGridTables.cellNewline",
     InsertTable = "markdownItGridTables.insertTable",
     ToggleHeader = "markdownItGridTables.toggleHeader",
+    SetColumnAlignmentLeft = "markdownItGridTables.setColumnAlignmentLeft",
+    SetColumnAlignmentCenter = "markdownItGridTables.setColumnAlignmentCenter",
+    SetColumnAlignmentRight = "markdownItGridTables.setColumnAlignmentRight",
+    SetColumnAlignmentNone = "markdownItGridTables.setColumnAlignmentNone",
 }
 
 type TCallback = (...args: any[]) => any;
@@ -58,6 +64,22 @@ const Commands: CommandRegistration[] =
         new CommandRegistration(
             CommandIds.ToggleHeader,
             buildCommand(ToggleHeaderCommand)),
+
+        new CommandRegistration(
+            CommandIds.SetColumnAlignmentLeft,
+            buildSetColumnAlignmentCommand(SetColumnAlignmentCommand, ColumnAlignments.Left)),
+
+        new CommandRegistration(
+            CommandIds.SetColumnAlignmentCenter,
+            buildSetColumnAlignmentCommand(SetColumnAlignmentCommand, ColumnAlignments.Center)),
+
+        new CommandRegistration(
+            CommandIds.SetColumnAlignmentRight,
+            buildSetColumnAlignmentCommand(SetColumnAlignmentCommand, ColumnAlignments.Right)),
+
+        new CommandRegistration(
+            CommandIds.SetColumnAlignmentNone,
+            buildSetColumnAlignmentCommand(SetColumnAlignmentCommand, ColumnAlignments.None)),
     ];
 
 export default Commands;
@@ -106,6 +128,32 @@ function buildInsertCommand<T extends AbstractInsertCommand>(
         const cmd = new TCommand(
             editor,
             insertBelow);
+
+        cmd.execute();
+    }
+}
+
+function buildSetColumnAlignmentCommand<T extends SetColumnAlignmentCommand>(
+    TCommand: new (editor: vscode.TextEditor, alignment: ColumnAlignments) => T,
+    alignment: ColumnAlignments
+): TCallback
+{
+    return () =>
+    {
+        // get active text editor
+        const editor = vscode
+            .window
+            .activeTextEditor;
+
+        if (!editor)
+        {
+            return;
+        }
+
+        // execute command
+        const cmd = new TCommand(
+            editor,
+            alignment);
 
         cmd.execute();
     }
