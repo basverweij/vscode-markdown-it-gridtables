@@ -14,7 +14,8 @@
 		"onCommand:markdownItGridTables.insertLineBelow",
 		"onCommand:markdownItGridTables.insertSeparatorAbove",
 		"onCommand:markdownItGridTables.insertSeparatorBelow",
-		"onCommand:markdownItGridTables.cellNewline"
+		"onCommand:markdownItGridTables.cellNewline",
+		"onCommand:markdownItGridTables.insertTable"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
@@ -39,6 +40,10 @@
 			{
 				"command": "markdownItGridTables.cellNewline",
 				"title": "Insert Cell Newline"
+			},
+			{
+				"command": "markdownItGridTables.insertTable",
+				"title": "Insert Table"
 			}
 		],
 		"menus": {
@@ -61,6 +66,10 @@
 				},
 				{
 					"command": "markdownItGridTables.cellNewline",
+					"when": "editorLangId == markdown"
+				},
+				{
+					"command": "markdownItGridTables.insertTable",
 					"when": "editorLangId == markdown"
 				}
 			]
@@ -93,6 +102,11 @@
 			{
 				"command": "markdownItGridTables.cellNewline",
 				"key": "enter",
+				"when": "editorTextFocus"
+			},
+			{
+				"command": "markdownItGridTables.insertTable",
+				"key": "ctrl+t t",
 				"when": "editorTextFocus"
 			}
 		]
