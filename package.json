@@ -122,8 +122,8 @@
 		"keybindings": [
 			{
 				"command": "markdownItGridTables.insertLineAbove",
-				"key": "ctrl+shift+t l",
-				"mac": "cmd+shift+t l",
+				"key": "ctrl+t shift+l",
+				"mac": "cmd+t shift+l",
 				"when": "editorTextFocus"
 			},
 			{
@@ -134,8 +134,8 @@
 			},
 			{
 				"command": "markdownItGridTables.insertSeparatorAbove",
-				"key": "ctrl+shift+t s",
-				"mac": "cmd+shift+t s",
+				"key": "ctrl+t shift+s",
+				"mac": "cmd+t shift+s",
 				"when": "editorTextFocus"
 			},
 			{
@@ -146,7 +146,7 @@
 			},
 			{
 				"command": "markdownItGridTables.cellNewline",
-				"key": "enter",
+				"key": "alt+enter",
 				"when": "editorTextFocus"
 			},
 			{

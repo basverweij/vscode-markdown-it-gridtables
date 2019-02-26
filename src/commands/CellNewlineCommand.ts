@@ -49,20 +49,6 @@ export default class CellNewlineCommand
             toCharacter - fromCharacter);
     }
 
-    protected internalNotInGridTable(): void
-    {
-        const pos = this.position();
-
-        this.insertText(
-            "\n",
-            pos.line,
-            pos.character);
-
-        this.select(
-            pos.line + 1,
-            0);
-    }
-
     private shouldInsertCellLine(
         pos: vscode.Position,
         activeCol: number
