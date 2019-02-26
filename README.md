@@ -1,4 +1,6 @@
-# vscode-markdown-it-gridtables README
+# Visual Studio Code MarkdownIt Grid Tables
+
+[Visual Studio Code](https://code.visualstudio.com/) extension to add support for [Pandoc Grid Tables](https://pandoc.org/MANUAL.html#tables) in the Markdown editor and [MarkdownIt](https://github.com/markdown-it/markdown-it) based preview.
 
 ## Key bindings
 
@@ -11,7 +13,7 @@ Key(s)|Command|Description
 `Alt+Enter`|[CellNewline](src/commands/CellNewlineCommand.ts)|
 `Ctrl+T T`|[InsertTable](src/commands/InsertTableCommand.ts)|
 `Ctrl+T H`|[ToggleHeader](src/commands/ToggleHeaderCommand.ts)|
-`Ctrl+T Ctrl+L`|[SetColumnAlignmentLeft](src/command/SetColumnAlignmentCommand.ts)|
-`Ctrl+T Ctrl+C`|[SetColumnAlignmentCenter](src/command/SetColumnAlignmentCommand.ts)|
-`Ctrl+T Ctrl+R`|[SetColumnAlignmentRight](src/command/SetColumnAlignmentCommand.ts)|
-`Ctrl+T Ctrl+N`|[SetColumnAlignmentNone](src/command/SetColumnAlignmentCommand.ts)|
+`Ctrl+T Ctrl+L`|[SetColumnAlignmentLeft](src/commands/SetColumnAlignmentCommand.ts)|
+`Ctrl+T Ctrl+C`|[SetColumnAlignmentCenter](src/commands/SetColumnAlignmentCommand.ts)|
+`Ctrl+T Ctrl+R`|[SetColumnAlignmentRight](src/commands/SetColumnAlignmentCommand.ts)|
+`Ctrl+T Ctrl+N`|[SetColumnAlignmentNone](src/commands/SetColumnAlignmentCommand.ts)|
