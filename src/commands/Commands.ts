@@ -8,6 +8,7 @@ import InsertTableCommand from './InsertTableCommand';
 import ToggleHeaderCommand from './ToggleHeaderCommand';
 import SetColumnAlignmentCommand from './SetColumnAlignmentCommand';
 import ColumnAlignments from '../common/ColumnAlignments';
+import InsertColumnCommand from './InsertColumnCommand';
 
 enum CommandIds 
 {
@@ -15,6 +16,8 @@ enum CommandIds
     InsertLineBelow = "markdownItGridTables.insertLineBelow",
     InsertSeparatorAbove = "markdownItGridTables.insertSeparatorAbove",
     InsertSeparatorBelow = "markdownItGridTables.insertSeparatorBelow",
+    InsertColumnLeft = "markdownItGridTables.insertColumnLeft",
+    InsertColumnRight = "markdownItGridTables.insertColumnRight",
     InsertCellNewline = "markdownItGridTables.cellNewline",
     InsertTable = "markdownItGridTables.insertTable",
     ToggleHeader = "markdownItGridTables.toggleHeader",
@@ -52,6 +55,14 @@ const Commands: CommandRegistration[] =
         new CommandRegistration(
             CommandIds.InsertSeparatorBelow,
             buildInsertCommand(InsertSeparatorCommand, true)),
+
+        new CommandRegistration(
+            CommandIds.InsertColumnLeft,
+            buildInsertCommand(InsertColumnCommand, false)),
+
+        new CommandRegistration(
+            CommandIds.InsertColumnRight,
+            buildInsertCommand(InsertColumnCommand, true)),
 
         new CommandRegistration(
             CommandIds.InsertCellNewline,
@@ -104,7 +115,7 @@ function buildCommand<T extends AbstractGridTableCommand>(
         const cmd = new TCommand(editor);
 
         cmd.execute();
-    }
+    };
 }
 
 function buildInsertCommand<T extends AbstractInsertCommand>(
@@ -130,7 +141,7 @@ function buildInsertCommand<T extends AbstractInsertCommand>(
             insertBelow);
 
         cmd.execute();
-    }
+    };
 }
 
 function buildSetColumnAlignmentCommand<T extends SetColumnAlignmentCommand>(
@@ -156,5 +167,5 @@ function buildSetColumnAlignmentCommand<T extends SetColumnAlignmentCommand>(
             alignment);
 
         cmd.execute();
-    }
+    };
 }

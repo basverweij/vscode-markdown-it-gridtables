@@ -14,6 +14,8 @@
 		"onCommand:markdownItGridTables.insertLineBelow",
 		"onCommand:markdownItGridTables.insertSeparatorAbove",
 		"onCommand:markdownItGridTables.insertSeparatorBelow",
+		"markdownItGridTables.insertColumnLeft",
+		"markdownItGridTables.insertColumnRight",
 		"onCommand:markdownItGridTables.cellNewline",
 		"onCommand:markdownItGridTables.insertTable",
 		"onCommand:markdownItGridTables.toggleHeader",
@@ -41,6 +43,14 @@
 			{
 				"command": "markdownItGridTables.insertSeparatorBelow",
 				"title": "Insert Separator Below"
+			},
+			{
+				"command": "markdownItGridTables.insertColumnLeft",
+				"title": "Insert Column Left"
+			},
+			{
+				"command": "markdownItGridTables.insertColumnRight",
+				"title": "Insert Column Right"
 			},
 			{
 				"command": "markdownItGridTables.cellNewline",
@@ -87,6 +97,14 @@
 				},
 				{
 					"command": "markdownItGridTables.insertSeparatorBelow",
+					"when": "editorLangId == markdown"
+				},
+				{
+					"command": "markdownItGridTables.insertColumnLeft",
+					"when": "editorLangId == markdown"
+				},
+				{
+					"command": "markdownItGridTables.insertColumnRight",
 					"when": "editorLangId == markdown"
 				},
 				{
@@ -142,6 +160,18 @@
 				"command": "markdownItGridTables.insertSeparatorBelow",
 				"key": "ctrl+t s",
 				"mac": "cmd+t s",
+				"when": "editorTextFocus"
+			},
+			{
+				"command": "markdownItGridTables.insertColumnLeft",
+				"key": "ctrl+t shift+c",
+				"mac": "cmd+t shift+c",
+				"when": "editorTextFocus"
+			},
+			{
+				"command": "markdownItGridTables.insertColumnRight",
+				"key": "ctrl+t c",
+				"mac": "cmd+t c",
 				"when": "editorTextFocus"
 			},
 			{
