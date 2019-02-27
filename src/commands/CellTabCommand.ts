@@ -1,4 +1,3 @@
-import * as vscode from "vscode";
 import AbstractInsertCommand from "./AbstractInsertCommand";
 import nthIndexOf from "../common/NthIndexOf";
 
