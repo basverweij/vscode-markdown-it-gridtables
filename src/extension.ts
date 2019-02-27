@@ -3,6 +3,7 @@ import Commands from "./commands/Commands";
 import Folders from "./folding/Folders";
 import Plugins from "./markdown/Plugins";
 import RangeFormatters from "./formatting/RangeFormatters";
+import UpdateContextCommand from "./commands/UpdateContextCommand";
 
 export function activate(
 	context: vscode.ExtensionContext)
@@ -27,6 +28,17 @@ export function activate(
 			vscode.languages.registerFoldingRangeProvider(
 				fld.selector,
 				fld.provider)));
+
+	// register update context command
+	context.subscriptions.push(
+		vscode.window.onDidChangeTextEditorSelection(
+			e =>
+			{
+				const cmd = new UpdateContextCommand(e.textEditor);
+
+				cmd.execute();
+			}
+		));
 
 	return {
 		extendMarkdownIt(

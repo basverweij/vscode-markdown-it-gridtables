@@ -196,18 +196,18 @@
 				"command": "markdownItGridTables.cellTabPrevious",
 				"key": "shift+tab",
 				"mac": "shift+tab",
-				"when": "editorTextFocus && !editorReadonly && !editorHasMultipleSelections"
+				"when": "markdownItGridTables:inGridTable && editorTextFocus && !editorReadonly && !editorHasMultipleSelections"
 			},
 			{
 				"command": "markdownItGridTables.cellTabNext",
 				"key": "tab",
 				"mac": "tab",
-				"when": "editorTextFocus && !editorReadonly && !editorHasMultipleSelections"
+				"when": "markdownItGridTables:inGridTable && editorTextFocus && !editorReadonly && !editorHasMultipleSelections"
 			},
 			{
 				"command": "markdownItGridTables.cellNewline",
-				"key": "alt+enter",
-				"when": "editorTextFocus"
+				"key": "enter",
+				"when": "markdownItGridTables:inGridTable && editorTextFocus && !editorReadonly && !editorHasMultipleSelections"
 			},
 			{
 				"command": "markdownItGridTables.insertTable",
@@ -217,7 +217,7 @@
 			{
 				"command": "markdownItGridTables.toggleHeader",
 				"key": "ctrl+t h",
-				"when": "editorTextFocus"
+				"when": "markdownItGridTables:inGridTable && editorTextFocus && !editorReadonly"
 			},
 			{
 				"command": "markdownItGridTables.setColumnAlignmentLeft",
