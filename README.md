@@ -19,3 +19,5 @@ Key(s)|Command|Description
 `Ctrl+T Ctrl+C`|[SetColumnAlignmentCenter](src/commands/SetColumnAlignmentCommand.ts)|
 `Ctrl+T Ctrl+R`|[SetColumnAlignmentRight](src/commands/SetColumnAlignmentCommand.ts)|
 `Ctrl+T Ctrl+N`|[SetColumnAlignmentNone](src/commands/SetColumnAlignmentCommand.ts)|
+`Shift+Tab`|[CellTabPrevious](src/commands/CellTabCommand.ts)|
+`Tab`|[CellTabNext](src/commands/CellTabCommand.ts)|

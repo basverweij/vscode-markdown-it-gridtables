@@ -119,21 +119,4 @@ export default class CellNewlineCommand
 
         return promise;
     }
-
-    private select(
-        line: number,
-        character: number,
-        width: number = 0)
-    {
-        // start at the end, so that the cursor is positioned correctly
-        const from = new vscode.Position(
-            line,
-            character + width);
-
-        const to = new vscode.Position(
-            line,
-            character);
-
-        this.editor.selection = new vscode.Selection(from, to);
-    }
 }

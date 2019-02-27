@@ -14,15 +14,17 @@
 		"onCommand:markdownItGridTables.insertLineBelow",
 		"onCommand:markdownItGridTables.insertSeparatorAbove",
 		"onCommand:markdownItGridTables.insertSeparatorBelow",
-		"markdownItGridTables.insertColumnLeft",
-		"markdownItGridTables.insertColumnRight",
+		"onCommand:markdownItGridTables.insertColumnLeft",
+		"onCommand:markdownItGridTables.insertColumnRight",
+		"onCommand:markdownItGridTables.cellTabPrevious",
+		"onCommand:markdownItGridTables.cellTabNext",
 		"onCommand:markdownItGridTables.cellNewline",
 		"onCommand:markdownItGridTables.insertTable",
 		"onCommand:markdownItGridTables.toggleHeader",
-		"markdownItGridTables.setColumnAlignmentLeft",
-		"markdownItGridTables.setColumnAlignmentCenter",
-		"markdownItGridTables.setColumnAlignmentRight",
-		"markdownItGridTables.setColumnAlignmentNone"
+		"onCommand:markdownItGridTables.setColumnAlignmentLeft",
+		"onCommand:markdownItGridTables.setColumnAlignmentCenter",
+		"onCommand:markdownItGridTables.setColumnAlignmentRight",
+		"onCommand:markdownItGridTables.setColumnAlignmentNone"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
@@ -51,6 +53,14 @@
 			{
 				"command": "markdownItGridTables.insertColumnRight",
 				"title": "Insert Column Right"
+			},
+			{
+				"command": "markdownItGridTables.cellTabPrevious",
+				"title": "Cell Tab Previous"
+			},
+			{
+				"command": "markdownItGridTables.cellTabNext",
+				"title": "Cell Tab Next"
 			},
 			{
 				"command": "markdownItGridTables.cellNewline",
@@ -105,6 +115,14 @@
 				},
 				{
 					"command": "markdownItGridTables.insertColumnRight",
+					"when": "editorLangId == markdown"
+				},
+				{
+					"command": "markdownItGridTables.cellTabPrevious",
+					"when": "editorLangId == markdown"
+				},
+				{
+					"command": "markdownItGridTables.cellTabNext",
 					"when": "editorLangId == markdown"
 				},
 				{
@@ -173,6 +191,18 @@
 				"key": "ctrl+t c",
 				"mac": "cmd+t c",
 				"when": "editorTextFocus"
+			},
+			{
+				"command": "markdownItGridTables.cellTabPrevious",
+				"key": "shift+tab",
+				"mac": "shift+tab",
+				"when": "editorTextFocus && !editorReadonly && !editorHasMultipleSelections"
+			},
+			{
+				"command": "markdownItGridTables.cellTabNext",
+				"key": "tab",
+				"mac": "tab",
+				"when": "editorTextFocus && !editorReadonly && !editorHasMultipleSelections"
 			},
 			{
 				"command": "markdownItGridTables.cellNewline",

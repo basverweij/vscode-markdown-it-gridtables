@@ -9,6 +9,7 @@ import ToggleHeaderCommand from './ToggleHeaderCommand';
 import SetColumnAlignmentCommand from './SetColumnAlignmentCommand';
 import ColumnAlignments from '../common/ColumnAlignments';
 import InsertColumnCommand from './InsertColumnCommand';
+import CellTabCommand from './CellTabCommand';
 
 enum CommandIds 
 {
@@ -18,6 +19,8 @@ enum CommandIds
     InsertSeparatorBelow = "markdownItGridTables.insertSeparatorBelow",
     InsertColumnLeft = "markdownItGridTables.insertColumnLeft",
     InsertColumnRight = "markdownItGridTables.insertColumnRight",
+    CellTabPrevious = "markdownItGridTables.cellTabPrevious",
+    CellTabNext = "markdownItGridTables.cellTabNext",
     InsertCellNewline = "markdownItGridTables.cellNewline",
     InsertTable = "markdownItGridTables.insertTable",
     ToggleHeader = "markdownItGridTables.toggleHeader",
@@ -63,6 +66,14 @@ const Commands: CommandRegistration[] =
         new CommandRegistration(
             CommandIds.InsertColumnRight,
             buildInsertCommand(InsertColumnCommand, true)),
+
+        new CommandRegistration(
+            CommandIds.CellTabPrevious,
+            buildInsertCommand(CellTabCommand, false)),
+
+        new CommandRegistration(
+            CommandIds.CellTabNext,
+            buildInsertCommand(CellTabCommand, true)),
 
         new CommandRegistration(
             CommandIds.InsertCellNewline,
