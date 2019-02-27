@@ -78,17 +78,17 @@ export default class ToggleHeaderCommand
 
             if (startLine.indexOf(":") >= 0)
             {
-                // start line contains alignments: move to header line
+                // remove alignments from start line
                 replacements.push(
                     new LineReplacement(
-                        headerLineNumber,
-                        startLine.replace(/[-]/g, "=")));
+                        startLineNumber,
+                        startLine.replace(/[:]/g, "-")));
             }
 
             replacements.push(
                 new LineReplacement(
-                    startLineNumber,
-                    startLine.replace(/[:]/g, "-")));
+                    headerLineNumber,
+                    startLine.replace(/[-]/g, "=")));
         }
 
         this.makeReplacements(...replacements);
