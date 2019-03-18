@@ -3,7 +3,7 @@ import Commands from "./commands/Commands";
 import Folders from "./folding/Folders";
 import Plugins from "./markdown/Plugins";
 import RangeFormatters from "./formatting/RangeFormatters";
-import UpdateContextCommand from "./commands/UpdateContextCommand";
+import updateInGridTableContext from "./context/UpdateInGridTableContext";
 
 export function activate(
 	context: vscode.ExtensionContext)
@@ -29,16 +29,10 @@ export function activate(
 				fld.selector,
 				fld.provider)));
 
-	// register update context command
+	// register update context handler
 	context.subscriptions.push(
 		vscode.window.onDidChangeTextEditorSelection(
-			e =>
-			{
-				const cmd = new UpdateContextCommand(e.textEditor);
-
-				cmd.execute();
-			}
-		));
+			e => updateInGridTableContext(e.textEditor)));
 
 	return {
 		extendMarkdownIt(
