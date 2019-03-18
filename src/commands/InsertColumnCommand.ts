@@ -1,7 +1,7 @@
-import * as vscode from "vscode";
 import AbstractInsertCommand from "./AbstractInsertCommand";
 import getTableStartLine from "../gridtables/GetTableStartLine";
 import nthIndexOf from "../common/NthIndexOf";
+import { Insert } from "./AbstractCommand";
 
 /**
  * The Insert Column Command inserts a new column into the
@@ -16,20 +16,11 @@ export default class InsertColumnCommand
 {
     protected internalExecute(): void
     {
-        let nthIndex = this.activeColumn();
-
-        // make sure that the index is set to a valid column
-        if (nthIndex < 0)
-        {
-            nthIndex = 0;
-        }
-        else if (nthIndex >= this.columnWidths.length)
-        {
-            nthIndex = this.columnWidths.length - 1;
-        }
-
-        // determine where to insert
-        nthIndex += (this.insertBelow ? 2 : 1);
+        const nthIndex = this
+            .activeColumn(true) +
+            (this.insertBelow ?
+                2 :
+                1);
 
         const doc = this.editor.document;
 
@@ -44,7 +35,7 @@ export default class InsertColumnCommand
 
         const inserts: Insert[] = [];
 
-        let insert: string;
+        let text: string;
 
         // loop all table lines
         for (let i = startLine; i < doc.lineCount; i++)
@@ -55,13 +46,13 @@ export default class InsertColumnCommand
 
             if (line.startsWith("+"))
             {
-                insert = line.indexOf("-") >= 0 ?
+                text = line.indexOf("-") >= 0 ?
                     "+---" :
                     "+===";
             }
             else if (line.startsWith("|"))
             {
-                insert = "|   ";
+                text = "|   ";
             }
             else
             {
@@ -72,38 +63,19 @@ export default class InsertColumnCommand
             // find location to insert and add to table
             const c = nthIndexOf(
                 line,
-                insert.charAt(0),
+                text.charAt(0),
                 nthIndex);
 
             if (c >= 0)
             {
                 inserts.push(
-                    new Insert(i, c, insert));
+                    new Insert(i, c, text));
             }
         }
 
         if (inserts.length > 0)
         {
-            // perform the inserts
-            this.editor.edit(
-                (editBuilder: vscode.TextEditorEdit) => 
-                {
-                    inserts.forEach(i =>
-                        editBuilder.insert(
-                            new vscode.Position(i.line, i.character),
-                            i.value));
-                }
-            );
+            this.makeInserts(...inserts);
         }
     }
-}
-
-class Insert
-{
-    constructor(
-        public line: number,
-        public character: number,
-        public value: string,
-    )
-    { }
 }

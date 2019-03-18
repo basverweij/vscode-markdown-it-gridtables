@@ -1,19 +1,21 @@
-import * as vscode from "vscode";
 import AbstractGridTableCommand from "./AbstractGridTableCommand";
 import nthIndexOf from "../common/NthIndexOf";
+import { Insert } from "./AbstractCommand";
 
 export default class CellNewlineCommand
     extends AbstractGridTableCommand
 {
     protected internalExecute(): void
     {
-        const pos = this.position();
+        const line = this
+            .position()
+            .line;
 
-        const activeCol = this.activeColumn();
+        let activeCol = this.activeColumn(true);
 
-        let promise: Promise<void>;
+        let promise: PromiseLike<boolean>;
 
-        if (this.shouldInsertCellLine(pos, activeCol))
+        if (this.shouldInsertCellLine(line, activeCol))
         {
             // insert cell new line
             const cellLine = this.columnWidths
@@ -21,54 +23,52 @@ export default class CellNewlineCommand
                 .join("") +
                 "|\n";
 
-            promise = this.insertText(
-                cellLine,
-                pos.line + 1,
-                0);
+            promise = this.makeInserts(
+                new Insert(line + 1, 0, cellLine))
         }
         else
         {
-            promise = Promise.resolve();
+            promise = Promise.resolve(true);
         }
 
         promise.then(
             () =>
             {
                 // get column start character
-                const line = this.editor
+                const text = this.editor
                     .document
-                    .lineAt(pos.line + 1)
+                    .lineAt(line + 1)
                     .text;
 
-                const columnChar = line.indexOf("+") >= 0 ?
+                const columnChar = text.indexOf("+") >= 0 ?
                     "+" :
                     "|";
 
                 let fromCharacter = nthIndexOf(
-                    line,
+                    text,
                     columnChar,
                     activeCol + 1)
                     + 2;
 
                 let toCharacter = nthIndexOf(
-                    line,
+                    text,
                     columnChar,
                     activeCol + 2)
                     - 1;
 
                 this.select(
-                    pos.line + 1,
+                    line + 1,
                     fromCharacter,
                     toCharacter - fromCharacter);
             });
     }
 
     private shouldInsertCellLine(
-        pos: vscode.Position,
+        line: number,
         activeCol: number
     ): boolean
     {
-        if (pos.line === this.editor.document.lineCount - 1)
+        if (line === this.editor.document.lineCount - 1)
         {
             // last line
             return true;
@@ -76,7 +76,7 @@ export default class CellNewlineCommand
 
         const nextLine = this.editor
             .document
-            .lineAt(pos.line + 1)
+            .lineAt(line + 1)
             .text;
 
         if (!nextLine.startsWith("|"))
@@ -94,29 +94,5 @@ export default class CellNewlineCommand
 
         // next line is not empty
         return nextColumn !== "";
-    }
-
-    private insertText(
-        text: string,
-        line: number,
-        character: number
-    ): Promise<void>
-    {
-        const promise = new Promise<void>(
-            (resolve, _) => 
-            {
-                this.editor.edit((editBuilder: vscode.TextEditorEdit) =>
-                {
-                    editBuilder.insert(
-                        new vscode.Position(
-                            line,
-                            character),
-                        text);
-
-                    resolve();
-                });
-            });
-
-        return promise;
     }
 }

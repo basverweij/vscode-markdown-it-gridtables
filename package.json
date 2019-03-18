@@ -160,48 +160,48 @@
 				"command": "markdownItGridTables.insertLineAbove",
 				"key": "ctrl+t shift+l",
 				"mac": "cmd+t shift+l",
-				"when": "editorTextFocus"
+				"when": "markdownItGridTables:inGridTable && editorTextFocus && !editorReadonly && !editorHasMultipleSelections"
 			},
 			{
 				"command": "markdownItGridTables.insertLineBelow",
 				"key": "ctrl+t l",
 				"mac": "cmd+t l",
-				"when": "editorTextFocus"
+				"when": "markdownItGridTables:inGridTable && editorTextFocus && !editorReadonly && !editorHasMultipleSelections"
 			},
 			{
 				"command": "markdownItGridTables.insertSeparatorAbove",
 				"key": "ctrl+t shift+s",
 				"mac": "cmd+t shift+s",
-				"when": "editorTextFocus"
+				"when": "markdownItGridTables:inGridTable && editorTextFocus && !editorReadonly && !editorHasMultipleSelections"
 			},
 			{
 				"command": "markdownItGridTables.insertSeparatorBelow",
 				"key": "ctrl+t s",
 				"mac": "cmd+t s",
-				"when": "editorTextFocus"
+				"when": "markdownItGridTables:inGridTable && editorTextFocus && !editorReadonly && !editorHasMultipleSelections"
 			},
 			{
 				"command": "markdownItGridTables.insertColumnLeft",
 				"key": "ctrl+t shift+c",
 				"mac": "cmd+t shift+c",
-				"when": "editorTextFocus"
+				"when": "markdownItGridTables:inGridTable && editorTextFocus && !editorReadonly && !editorHasMultipleSelections"
 			},
 			{
 				"command": "markdownItGridTables.insertColumnRight",
 				"key": "ctrl+t c",
 				"mac": "cmd+t c",
-				"when": "editorTextFocus"
+				"when": "markdownItGridTables:inGridTable && editorTextFocus && !editorReadonly && !editorHasMultipleSelections"
 			},
 			{
 				"command": "markdownItGridTables.cellTabPrevious",
-				"key": "shift+tab",
-				"mac": "shift+tab",
+				"key": "alt+left",
+				"mac": "alt+left",
 				"when": "markdownItGridTables:inGridTable && editorTextFocus && !editorReadonly && !editorHasMultipleSelections"
 			},
 			{
 				"command": "markdownItGridTables.cellTabNext",
-				"key": "tab",
-				"mac": "tab",
+				"key": "alt+right",
+				"mac": "alt+right",
 				"when": "markdownItGridTables:inGridTable && editorTextFocus && !editorReadonly && !editorHasMultipleSelections"
 			},
 			{
@@ -212,32 +212,32 @@
 			{
 				"command": "markdownItGridTables.insertTable",
 				"key": "ctrl+t t",
-				"when": "editorTextFocus"
+				"when": "!markdownItGridTables:inGridTable && editorTextFocus && !editorReadonly && !editorHasMultipleSelections"
 			},
 			{
 				"command": "markdownItGridTables.toggleHeader",
 				"key": "ctrl+t h",
-				"when": "markdownItGridTables:inGridTable && editorTextFocus && !editorReadonly"
+				"when": "markdownItGridTables:inGridTable && editorTextFocus && !editorReadonly && !editorHasMultipleSelections"
 			},
 			{
 				"command": "markdownItGridTables.setColumnAlignmentLeft",
 				"key": "ctrl+t ctrl+l",
-				"when": "editorTextFocus"
+				"when": "markdownItGridTables:inGridTable && editorTextFocus && !editorReadonly && !editorHasMultipleSelections"
 			},
 			{
 				"command": "markdownItGridTables.setColumnAlignmentCenter",
 				"key": "ctrl+t ctrl+c",
-				"when": "editorTextFocus"
+				"when": "markdownItGridTables:inGridTable && editorTextFocus && !editorReadonly && !editorHasMultipleSelections"
 			},
 			{
 				"command": "markdownItGridTables.setColumnAlignmentRight",
 				"key": "ctrl+t ctrl+r",
-				"when": "editorTextFocus"
+				"when": "markdownItGridTables:inGridTable && editorTextFocus && !editorReadonly && !editorHasMultipleSelections"
 			},
 			{
 				"command": "markdownItGridTables.setColumnAlignmentNone",
 				"key": "ctrl+t ctrl+n",
-				"when": "editorTextFocus"
+				"when": "markdownItGridTables:inGridTable && editorTextFocus && !editorReadonly && !editorHasMultipleSelections"
 			}
 		]
 	},

@@ -6,13 +6,13 @@ export default class CellTabCommand
 {
     protected internalExecute(): void
     {
-        const pos = this.position();
-
-        let lineNumber = pos.line;
+        let line = this
+            .position()
+            .line;
 
         if (!this.editor
             .document
-            .lineAt(lineNumber)
+            .lineAt(line)
             .text
             .startsWith("|"))
         {
@@ -22,87 +22,87 @@ export default class CellTabCommand
 
         let activeCol = this.activeColumn();
 
-        // make sure that the index is set to a valid column
+        // normalize the column index
         if (activeCol < 0)
         {
-            activeCol = 0;
+            activeCol = -1;
         }
         else if (activeCol >= this.columnWidths.length)
         {
-            activeCol = this.columnWidths.length - 1;
+            activeCol = this.columnWidths.length;
         }
 
         if (this.insertBelow)
         {
             activeCol++;
 
-            if (activeCol === this.columnWidths.length)
+            if (activeCol >= this.columnWidths.length)
             {
                 // move to next line, first column
                 activeCol = 0;
-                lineNumber = this.findLine(lineNumber, 1);
+                line = this.findLine(line, 1);
             }
         }
         else
         {
             activeCol--;
 
-            if (activeCol === -1)
+            if (activeCol < 0)
             {
                 // move to previous line, last column
                 activeCol = this.columnWidths.length - 1;
-                lineNumber = this.findLine(lineNumber, -1);
+                line = this.findLine(line, -1);
             }
         }
 
-        if (lineNumber === -1)
+        if (line === -1)
         {
             // not able to move to previous/next column line
             return;
         }
 
-        const line = this.editor
+        const text = this.editor
             .document
-            .lineAt(lineNumber)
+            .lineAt(line)
             .text;
 
         let fromCharacter = nthIndexOf(
-            line,
+            text,
             "|",
             activeCol + 1)
             + 2;
 
         let toCharacter = nthIndexOf(
-            line,
+            text,
             "|",
             activeCol + 2)
             - 1;
 
         this.select(
-            lineNumber,
+            line,
             fromCharacter,
             toCharacter - fromCharacter);
     }
 
     private findLine(
-        lineNumber: number,
+        line: number,
         delta: number
     ): number
     {
         const doc = this.editor.document;
 
-        for (lineNumber += delta; lineNumber >= 0 && lineNumber < doc.lineCount; lineNumber += delta)
+        for (line += delta; line >= 0 && line < doc.lineCount; line += delta)
         {
-            const line = doc
-                .lineAt(lineNumber)
+            const text = doc
+                .lineAt(line)
                 .text;
 
-            if (line.startsWith("|"))
+            if (text.startsWith("|"))
             {
-                return lineNumber;
+                return line;
             }
 
-            if (!line.startsWith("+"))
+            if (!text.startsWith("+"))
             {
                 break;
             }

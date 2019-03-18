@@ -1,15 +1,12 @@
-import * as vscode from "vscode";
 import getActiveTableColumnWidths from "../gridtables/GetActiveTableColumnWidths";
+import AbstractCommand from "./AbstractCommand";
 
 export default abstract class AbstractGridTableCommand
+    extends AbstractCommand
 {
     protected columnWidths: number[] = [];
 
-    constructor(
-        protected readonly editor: vscode.TextEditor)
-    { }
-
-    execute()
+    execute(): void
     {
         // get active table column widths
         this.columnWidths = getActiveTableColumnWidths(
@@ -18,7 +15,7 @@ export default abstract class AbstractGridTableCommand
 
         if (this.columnWidths.length === 0)
         {
-            this.internalNotInGridTable();
+            this.warning("Grid Table start line not found, or no columns found.");
 
             return;
         }
@@ -28,26 +25,9 @@ export default abstract class AbstractGridTableCommand
 
     protected abstract internalExecute(): void;
 
-    protected internalNotInGridTable(): void
-    {
-        this.warning("Not in a Grid Table");
-    }
-
-    protected warning(
-        message: string
-    )
-    {
-        vscode.window.showWarningMessage(message);
-    }
-
-    protected position(): vscode.Position
-    {
-        return this.editor
-            .selection
-            .active;
-    }
-
-    protected activeColumn(): number
+    protected activeColumn(
+        normalized?: boolean
+    ): number
     {
         const pos = this.position();
 
@@ -61,30 +41,23 @@ export default abstract class AbstractGridTableCommand
                 "+" :
                 "|";
 
-        return line
+        let activeCol = line
             .substr(0, pos.character)
             .split(splitChar)
             .length - 2;
-    }
 
-    protected select(
-        line: number,
-        character: number,
-        width: number = 0)
-    {
-        // start at the end, so that the cursor is positioned correctly
-        const from = new vscode.Position(
-            line,
-            character + width);
+        if (normalized)
+        {
+            if (activeCol < 0)
+            {
+                activeCol = 0;
+            }
+            else if (activeCol >= this.columnWidths.length)
+            {
+                activeCol = this.columnWidths.length - 1;
+            }
+        }
 
-        const to = new vscode.Position(
-            line,
-            character);
-
-        this.editor.selection = new vscode.Selection(from, to);
-
-        this.editor.revealRange(
-            this.editor.selection,
-            vscode.TextEditorRevealType.Default);
+        return activeCol;
     }
 }

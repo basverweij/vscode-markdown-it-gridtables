@@ -2,7 +2,6 @@ import * as vscode from 'vscode';
 import AbstractInsertCommand from './AbstractInsertCommand';
 import InsertLineCommand from "./InsertLineCommand";
 import InsertSeparatorCommand from './InsertSeparatorCommand';
-import AbstractGridTableCommand from './AbstractGridTableCommand';
 import CellNewlineCommand from './CellNewlineCommand';
 import InsertTableCommand from './InsertTableCommand';
 import ToggleHeaderCommand from './ToggleHeaderCommand';
@@ -10,6 +9,7 @@ import SetColumnAlignmentCommand from './SetColumnAlignmentCommand';
 import ColumnAlignments from '../common/ColumnAlignments';
 import InsertColumnCommand from './InsertColumnCommand';
 import CellTabCommand from './CellTabCommand';
+import AbstractCommand from './AbstractCommand';
 
 enum CommandIds 
 {
@@ -106,7 +106,7 @@ const Commands: CommandRegistration[] =
 
 export default Commands;
 
-function buildCommand<T extends AbstractGridTableCommand>(
+function buildCommand<T extends AbstractCommand>(
     TCommand: new (editor: vscode.TextEditor) => T
 ): TCallback
 {

@@ -12,12 +12,12 @@ Key(s)|Command|Description
 `Ctrl+T S`|[InsertSeparatorBelow](src/commands/InsertSeparatorCommand.ts)|
 `Ctrl+T Shift+C`|[InsertColumnLeft](src/commands/InsertColumnCommand.ts)|
 `Ctrl+T C`|[InsertColumnRight](src/commands/InsertColumnCommand.ts)|
-`Alt+Enter`|[CellNewline](src/commands/CellNewlineCommand.ts)|
+`Enter`|[CellNewline](src/commands/CellNewlineCommand.ts)|
 `Ctrl+T T`|[InsertTable](src/commands/InsertTableCommand.ts)|
 `Ctrl+T H`|[ToggleHeader](src/commands/ToggleHeaderCommand.ts)|
 `Ctrl+T Ctrl+L`|[SetColumnAlignmentLeft](src/commands/SetColumnAlignmentCommand.ts)|
 `Ctrl+T Ctrl+C`|[SetColumnAlignmentCenter](src/commands/SetColumnAlignmentCommand.ts)|
 `Ctrl+T Ctrl+R`|[SetColumnAlignmentRight](src/commands/SetColumnAlignmentCommand.ts)|
 `Ctrl+T Ctrl+N`|[SetColumnAlignmentNone](src/commands/SetColumnAlignmentCommand.ts)|
-`Shift+Tab`|[CellTabPrevious](src/commands/CellTabCommand.ts)|
-`Tab`|[CellTabNext](src/commands/CellTabCommand.ts)|
+`Alt+Left`|[CellTabPrevious](src/commands/CellTabCommand.ts)|
+`Alt+Right`|[CellTabNext](src/commands/CellTabCommand.ts)|

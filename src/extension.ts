@@ -31,8 +31,18 @@ export function activate(
 
 	// register update context handler
 	context.subscriptions.push(
+		vscode.window.onDidChangeActiveTextEditor(
+			e => e && updateInGridTableContext(e)));
+
+	context.subscriptions.push(
 		vscode.window.onDidChangeTextEditorSelection(
 			e => updateInGridTableContext(e.textEditor)));
+
+	if (vscode.window.activeTextEditor)
+	{
+		// set initial context
+		updateInGridTableContext(vscode.window.activeTextEditor);
+	}
 
 	return {
 		extendMarkdownIt(

@@ -2,6 +2,7 @@ import * as vscode from "vscode";
 import AbstractGridTableCommand from "./AbstractGridTableCommand";
 import getTableStartLine from "../gridtables/GetTableStartLine";
 import getTableHeaderLine from "../gridtables/GetTableHeaderLine";
+import { Replacement } from "./AbstractCommand";
 
 export default class ToggleHeaderCommand
     extends AbstractGridTableCommand
@@ -45,7 +46,7 @@ export default class ToggleHeaderCommand
         startLineNumber: number,
         headerLineNumber: number)
     {
-        const replacements: LineReplacement[] = [];
+        const replacements: Replacement[] = [];
 
         const headerLine = doc
             .lineAt(headerLineNumber)
@@ -59,14 +60,18 @@ export default class ToggleHeaderCommand
             {
                 // header line contains alignments: move to start line
                 replacements.push(
-                    new LineReplacement(
+                    new Replacement(
                         startLineNumber,
+                        0,
+                        headerLine.length,
                         headerLine.replace(/[=]/g, "-")));
             }
 
             replacements.push(
-                new LineReplacement(
+                new Replacement(
                     headerLineNumber,
+                    0,
+                    headerLine.length,
                     headerLine.replace(/[=:]/g, "-")));
         }
         else
@@ -80,49 +85,21 @@ export default class ToggleHeaderCommand
             {
                 // remove alignments from start line
                 replacements.push(
-                    new LineReplacement(
+                    new Replacement(
                         startLineNumber,
+                        0,
+                        startLine.length,
                         startLine.replace(/[:]/g, "-")));
             }
 
             replacements.push(
-                new LineReplacement(
+                new Replacement(
                     headerLineNumber,
+                    0,
+                    startLine.length,
                     startLine.replace(/[-]/g, "=")));
         }
 
         this.makeReplacements(...replacements);
     }
-
-    private makeReplacements(
-        ...replacements: LineReplacement[])
-    {
-        this.editor.edit((
-            editBuilder: vscode.TextEditorEdit
-        ) =>
-        {
-            replacements.forEach(r => 
-            {
-                const line = this
-                    .editor
-                    .document
-                    .lineAt(r.lineNumber)
-                    .text;
-
-                const range = new vscode.Range(
-                    new vscode.Position(r.lineNumber, 0),
-                    new vscode.Position(r.lineNumber, line.length));
-
-                editBuilder.replace(range, r.value);
-            });
-        });
-    }
-}
-
-class LineReplacement
-{
-    constructor(
-        public lineNumber: number,
-        public value: string)
-    { }
 }

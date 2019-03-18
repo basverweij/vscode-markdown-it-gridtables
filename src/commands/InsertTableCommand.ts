@@ -1,17 +1,11 @@
-import * as vscode from "vscode";
-import AbstractGridTableCommand from "./AbstractGridTableCommand";
+import AbstractCommand from "./AbstractCommand";
 
 export default class InsertTableCommand
-    extends AbstractGridTableCommand
+    extends AbstractCommand
 {
-    protected internalExecute(): void
+    execute(): void
     {
-        this.warning("In a Grid Table");
-    }
-
-    protected internalNotInGridTable(): void
-    {
-        // build snippet string
+        // build snippet
         const snippet =
             "+---+---+\n" +
             "| $0${1: } | ${2: } |\n" +
@@ -19,11 +13,13 @@ export default class InsertTableCommand
             "| ${3: } | ${4: } |\n" +
             "+---+---+\n";
 
-        // insert snippet
-        const line = this.position().line;
+        // determine line
+        const line = this
+            .position()
+            .line;
 
-        this.editor.insertSnippet(
-            new vscode.SnippetString(snippet),
-            new vscode.Position(line, 0));
+        this.insertSnippet(
+            snippet,
+            line);
     }
 }

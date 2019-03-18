@@ -1,4 +1,3 @@
-import * as vscode from "vscode";
 import AbstractInsertCommand from "./AbstractInsertCommand";
 
 export default class InsertLineCommand
@@ -7,9 +6,9 @@ export default class InsertLineCommand
     internalExecute()
     {
         // find active column
-        const activeCol = this.activeColumn();
+        const activeCol = this.activeColumn(true);
 
-        // build snippet string
+        // build snippet
         const snippet =
             "$0" +
             this.columnWidths
@@ -17,12 +16,16 @@ export default class InsertLineCommand
                 .join("") +
             "|\n";
 
-        // insert snippet
-        const line = this.position().line +
-            (this.insertBelow ? 1 : 0);
+        // determine line
+        const line = this
+            .position()
+            .line +
+            (this.insertBelow ?
+                1 :
+                0);
 
-        this.editor.insertSnippet(
-            new vscode.SnippetString(snippet),
-            new vscode.Position(line, 0));
+        this.insertSnippet(
+            snippet,
+            line);
     }
 }

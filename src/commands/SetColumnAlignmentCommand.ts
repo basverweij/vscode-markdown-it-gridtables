@@ -4,13 +4,14 @@ import ColumnAlignments from "../common/ColumnAlignments";
 import getTableStartLine from "../gridtables/GetTableStartLine";
 import getTableHeaderLine from "../gridtables/GetTableHeaderLine";
 import nthIndexOf from "../common/NthIndexOf";
+import { Replacement } from "./AbstractCommand";
 
 export default class SetColumnAlignmentCommand
     extends AbstractGridTableCommand
 {
     constructor(
         editor: vscode.TextEditor,
-        public alignment: ColumnAlignments)
+        private readonly alignment: ColumnAlignments)
     {
         super(editor);
     }
@@ -55,7 +56,7 @@ export default class SetColumnAlignmentCommand
         }
 
         // find active column
-        const activeCol = this.activeColumn();
+        const activeCol = this.activeColumn(true);
 
         const colStart = nthIndexOf(line, "+", activeCol + 1);
 
@@ -74,22 +75,10 @@ export default class SetColumnAlignmentCommand
             lineChar,
             this.alignment);
 
-        this.editor.edit((
-            editBuilder: vscode.TextEditorEdit
-        ) =>
-        {
-            editBuilder.replace(
-                new vscode.Range(
-                    new vscode.Position(lineNumber, colStart + 1),
-                    new vscode.Position(lineNumber, colStart + 2)),
-                colAlignment[0]);
-
-            editBuilder.replace(
-                new vscode.Range(
-                    new vscode.Position(lineNumber, colEnd - 1),
-                    new vscode.Position(lineNumber, colEnd)),
-                colAlignment[1]);
-        });
+        this.makeReplacements(
+            new Replacement(lineNumber, colStart + 1, colStart + 2, colAlignment[0]),
+            new Replacement(lineNumber, colEnd - 1, colEnd, colAlignment[1]),
+        );
     }
 }
 
