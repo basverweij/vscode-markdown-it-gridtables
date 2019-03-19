@@ -10,6 +10,7 @@ import ColumnAlignments from '../common/ColumnAlignments';
 import InsertColumnCommand from './InsertColumnCommand';
 import CellTabCommand from './CellTabCommand';
 import AbstractCommand from './AbstractCommand';
+import CellMoveLineCommand from './CellMoveLineCommand';
 
 enum CommandIds 
 {
@@ -21,6 +22,8 @@ enum CommandIds
     InsertColumnRight = "markdownItGridTables.insertColumnRight",
     CellTabPrevious = "markdownItGridTables.cellTabPrevious",
     CellTabNext = "markdownItGridTables.cellTabNext",
+    CellPreviousLine = "markdownItGridTables.cellPreviousLine",
+    CellNextLine = "markdownItGridTables.cellNextLine",
     InsertCellNewline = "markdownItGridTables.cellNewline",
     InsertTable = "markdownItGridTables.insertTable",
     ToggleHeader = "markdownItGridTables.toggleHeader",
@@ -74,6 +77,14 @@ const Commands: CommandRegistration[] =
         new CommandRegistration(
             CommandIds.CellTabNext,
             buildInsertCommand(CellTabCommand, true)),
+
+        new CommandRegistration(
+            CommandIds.CellPreviousLine,
+            buildInsertCommand(CellMoveLineCommand, false)),
+
+        new CommandRegistration(
+            CommandIds.CellNextLine,
+            buildInsertCommand(CellMoveLineCommand, true)),
 
         new CommandRegistration(
             CommandIds.InsertCellNewline,

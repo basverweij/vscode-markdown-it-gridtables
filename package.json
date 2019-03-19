@@ -18,6 +18,8 @@
 		"onCommand:markdownItGridTables.insertColumnRight",
 		"onCommand:markdownItGridTables.cellTabPrevious",
 		"onCommand:markdownItGridTables.cellTabNext",
+		"onCommand:markdownItGridTables.cellPreviousLine",
+		"onCommand:markdownItGridTables.cellNextLine",
 		"onCommand:markdownItGridTables.cellNewline",
 		"onCommand:markdownItGridTables.insertTable",
 		"onCommand:markdownItGridTables.toggleHeader",
@@ -61,6 +63,14 @@
 			{
 				"command": "markdownItGridTables.cellTabNext",
 				"title": "Cell Tab Next"
+			},
+			{
+				"command": "markdownItGridTables.cellPreviousLine",
+				"title": "Cell Move to Previous Line"
+			},
+			{
+				"command": "markdownItGridTables.cellNextLine",
+				"title": "Cell Move to Next Line"
 			},
 			{
 				"command": "markdownItGridTables.cellNewline",
@@ -123,6 +133,14 @@
 				},
 				{
 					"command": "markdownItGridTables.cellTabNext",
+					"when": "editorLangId == markdown"
+				},
+				{
+					"command": "markdownItGridTables.cellPreviousLine",
+					"when": "editorLangId == markdown"
+				},
+				{
+					"command": "markdownItGridTables.cellNextLine",
 					"when": "editorLangId == markdown"
 				},
 				{
@@ -202,6 +220,18 @@
 				"command": "markdownItGridTables.cellTabNext",
 				"key": "alt+right",
 				"mac": "alt+right",
+				"when": "markdownItGridTables:inGridTable && editorTextFocus && !editorReadonly && !editorHasMultipleSelections"
+			},
+			{
+				"command": "markdownItGridTables.cellPreviousLine",
+				"key": "shift+enter",
+				"mac": "shift+enter",
+				"when": "markdownItGridTables:inGridTable && editorTextFocus && !editorReadonly && !editorHasMultipleSelections"
+			},
+			{
+				"command": "markdownItGridTables.cellNextLine",
+				"key": "alt+enter",
+				"mac": "alt+enter",
 				"when": "markdownItGridTables:inGridTable && editorTextFocus && !editorReadonly && !editorHasMultipleSelections"
 			},
 			{

@@ -21,3 +21,5 @@ Key(s)|Command|Description
 `Ctrl+T Ctrl+N`|[SetColumnAlignmentNone](src/commands/SetColumnAlignmentCommand.ts)|
 `Alt+Left`|[CellTabPrevious](src/commands/CellTabCommand.ts)|
 `Alt+Right`|[CellTabNext](src/commands/CellTabCommand.ts)|
+`Shift+Enter`|[CellPreviousLine](src/commands/CellMoveLineCommand.ts)|
+`Alt+Right`|[CellNextLine](src/commands/CellMoveLineCommand.ts)|
