@@ -11,6 +11,15 @@ export default class CellNewlineCommand
             .position()
             .line;
 
+        if (this.atStartOfTable(line))
+        {
+            // only insert newline
+            this.makeInserts(
+                new Insert(line, 0, this.eol()));
+
+            return;
+        }
+
         let activeCol = this.activeColumn(true);
 
         let promise: PromiseLike<boolean>;
@@ -21,10 +30,11 @@ export default class CellNewlineCommand
             const cellLine = this.columnWidths
                 .map(w => "|" + " ".repeat(w - 1))
                 .join("") +
-                "|\n";
+                "|" +
+                this.eol();
 
             promise = this.makeInserts(
-                new Insert(line + 1, 0, cellLine))
+                new Insert(line + 1, 0, cellLine));
         }
         else
         {
@@ -94,5 +104,25 @@ export default class CellNewlineCommand
 
         // next line is not empty
         return nextColumn !== "";
+    }
+
+    private atStartOfTable(
+        line: number
+    ): boolean
+    {
+        if (this.position().character > 0)
+        {
+            // not a the beginning of a line
+            return false;
+        }
+
+        if (!this.editor.document.lineAt(line).text.startsWith("+"))
+        {
+            // not a separator line
+            return false;
+        }
+
+        return (line === 0) || // first line in the document
+            !this.editor.document.lineAt(line - 1).text.startsWith("|"); // not a table line
     }
 }
