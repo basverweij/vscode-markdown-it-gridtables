@@ -1,5 +1,4 @@
 import AbstractCommand from "./AbstractCommand";
-import { sep } from "path";
 
 export default class InsertTableCommand
     extends AbstractCommand
