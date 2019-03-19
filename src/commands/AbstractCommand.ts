@@ -95,6 +95,23 @@ export default class AbstractCommand
                     i.text));
         });
     }
+
+    protected showInputBox(
+        prompt: string,
+        value?: string
+    ): Thenable<string | undefined>
+    {
+        return vscode.window.showInputBox(
+            { prompt: prompt, value: value }
+        );
+    }
+
+    protected eol(): string
+    {
+        return this.editor.document.eol === vscode.EndOfLine.LF ?
+            "\n" :
+            "\r\n";
+    }
 }
 
 export class Replacement
