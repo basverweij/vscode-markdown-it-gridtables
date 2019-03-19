@@ -1,6 +1,6 @@
 import AbstractGridTableCommand from "./AbstractGridTableCommand";
 import nthIndexOf from "../common/NthIndexOf";
-import { Insert } from "./AbstractCommand";
+import { Insert, Replacement } from "./AbstractCommand";
 
 export default class CellNewlineCommand
     extends AbstractGridTableCommand
@@ -41,6 +41,47 @@ export default class CellNewlineCommand
             promise = Promise.resolve(true);
         }
 
+        // check if we need to replace part of the current cell line
+        const text = this
+            .editor
+            .document
+            .lineAt(line)
+            .text;
+
+        const start = this.position().character;
+
+        const end = nthIndexOf(text, "|", activeCol + 2) - 1;
+
+        const remainingCellLine = text
+            .substring(start, end)
+            .trim();
+
+        if (remainingCellLine !== "")
+        {
+            const cellStart = nthIndexOf(text, "|", activeCol + 1) + 2;
+
+            promise
+                .then(() =>
+                {
+                    return this.makeReplacements(
+                        // replace remaining cell line with spaces
+                        new Replacement(line, start, start + remainingCellLine.length, " ".repeat(remainingCellLine.length)),
+                        // move remaining cell line to start of next cell line
+                        new Replacement(line + 1, cellStart, cellStart + remainingCellLine.length, remainingCellLine));
+                })
+                .then(() =>
+                {
+                    this.select(
+                        line + 1,
+                        cellStart);
+
+                    return true;
+                });
+
+            return;
+        }
+
+        // select blank cell line
         promise.then(
             () =>
             {
