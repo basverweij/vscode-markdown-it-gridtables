@@ -11,7 +11,9 @@ export default class InsertSeparatorCommand
             this.columnWidths
                 .map((w) => "-".repeat(w - 1))
                 .join("+") +
-            "+\n$0";
+            "+" +
+            this.eol() +
+            "$0";
 
         // determine line
         const line = this

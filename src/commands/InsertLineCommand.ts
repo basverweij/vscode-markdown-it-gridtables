@@ -14,7 +14,8 @@ export default class InsertLineCommand
             this.columnWidths
                 .map((w, i) => `| \$\{${((i - activeCol + this.columnWidths.length) % this.columnWidths.length) + 1}:${" ".repeat(w - 3)}\} `)
                 .join("") +
-            "|\n";
+            "|" +
+            this.eol();
 
         // determine line
         const line = this
