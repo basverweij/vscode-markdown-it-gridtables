@@ -2,7 +2,6 @@ import * as vscode from "vscode";
 import AbstractGridTableCommand from "./AbstractGridTableCommand";
 import getTableStartLine from "../gridtables/GetTableStartLine";
 import getTableHeaderLine from "../gridtables/GetTableHeaderLine";
-import { Replacement } from "./AbstractCommand";
 
 export default class ToggleHeaderCommand
     extends AbstractGridTableCommand
@@ -46,7 +45,7 @@ export default class ToggleHeaderCommand
         startLineNumber: number,
         headerLineNumber: number)
     {
-        const replacements: Replacement[] = [];
+        let edit = this.newEdit();
 
         const headerLine = doc
             .lineAt(headerLineNumber)
@@ -59,20 +58,18 @@ export default class ToggleHeaderCommand
             if (headerLine.indexOf(":") >= 0)
             {
                 // header line contains alignments: move to start line
-                replacements.push(
-                    new Replacement(
-                        startLineNumber,
-                        0,
-                        headerLine.length,
-                        headerLine.replace(/[=]/g, "-")));
-            }
-
-            replacements.push(
-                new Replacement(
-                    headerLineNumber,
+                edit.replace(
+                    startLineNumber,
                     0,
                     headerLine.length,
-                    headerLine.replace(/[=:]/g, "-")));
+                    headerLine.replace(/[=]/g, "-"));
+            }
+
+            edit.replace(
+                headerLineNumber,
+                0,
+                headerLine.length,
+                headerLine.replace(/[=:]/g, "-"));
         }
         else
         {
@@ -84,22 +81,20 @@ export default class ToggleHeaderCommand
             if (startLine.indexOf(":") >= 0)
             {
                 // remove alignments from start line
-                replacements.push(
-                    new Replacement(
-                        startLineNumber,
-                        0,
-                        startLine.length,
-                        startLine.replace(/[:]/g, "-")));
-            }
-
-            replacements.push(
-                new Replacement(
-                    headerLineNumber,
+                edit.replace(
+                    startLineNumber,
                     0,
                     startLine.length,
-                    startLine.replace(/[-]/g, "=")));
+                    startLine.replace(/[:]/g, "-"));
+            }
+
+            edit.replace(
+                headerLineNumber,
+                0,
+                startLine.length,
+                startLine.replace(/[-]/g, "="));
         }
 
-        this.makeReplacements(...replacements);
+        edit.complete();
     }
 }

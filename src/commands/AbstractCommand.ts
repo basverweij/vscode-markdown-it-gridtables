@@ -54,48 +54,6 @@ export default class AbstractCommand
             new vscode.Position(line, character || 0));
     }
 
-    protected makeReplacements(
-        ...replacements: Replacement[]
-    ): PromiseLike<boolean>
-    {
-        if (replacements.length === 0)
-        {
-            return Promise.resolve(true);
-        }
-
-        return this.editor.edit((
-            editBuilder: vscode.TextEditorEdit
-        ) =>
-        {
-            replacements.forEach(r =>
-                editBuilder.replace(
-                    new vscode.Range(
-                        new vscode.Position(r.line, r.start),
-                        new vscode.Position(r.line, r.end)),
-                    r.text));
-        });
-    }
-
-    protected makeInserts(
-        ...inserts: Insert[]
-    ): PromiseLike<boolean>
-    {
-        if (inserts.length === 0)
-        {
-            return Promise.resolve(true);
-        }
-
-        return this.editor.edit((
-            editBuilder: vscode.TextEditorEdit
-        ) => 
-        {
-            inserts.forEach(i =>
-                editBuilder.insert(
-                    new vscode.Position(i.line, i.character),
-                    i.text));
-        });
-    }
-
     protected showInputBox(
         prompt: string,
         value?: string
@@ -112,25 +70,64 @@ export default class AbstractCommand
             "\n" :
             "\r\n";
     }
+
+    protected newEdit(): EditBuilder
+    {
+        return new EditBuilder(this.editor);
+    }
 }
 
-export class Replacement
-{
-    constructor(
-        readonly line: number,
-        readonly start: number,
-        readonly end: number,
-        readonly text: string
-    )
-    { }
-}
+type Edit = (editBuilder: vscode.TextEditorEdit) => void;
 
-export class Insert
+class EditBuilder
 {
+    private edits: Edit[] = [];
+
     constructor(
-        readonly line: number,
-        readonly character: number,
-        readonly text: string
+        private editor: vscode.TextEditor
     )
     { }
+
+    insert(
+        line: number,
+        character: number,
+        text: string
+    ): EditBuilder
+    {
+        this.edits.push(
+            (editBuilder) => editBuilder.insert(
+                new vscode.Position(line, character),
+                text));
+
+        return this;
+    }
+
+    replace(
+        line: number,
+        start: number,
+        end: number,
+        text: string
+    ): EditBuilder
+    {
+        this.edits.push(
+            (editBuilder) => editBuilder.replace(
+                new vscode.Range(
+                    new vscode.Position(line, start),
+                    new vscode.Position(line, end)),
+                text));
+
+        return this;
+    }
+
+    complete(): Thenable<boolean>
+    {
+        if (this.edits.length === 0)
+        {
+            return Promise.resolve(true);
+        }
+
+        return this.editor.edit(
+            (editBuilder) => this.edits.forEach(
+                e => e(editBuilder)));
+    }
 }

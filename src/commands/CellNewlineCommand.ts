@@ -1,6 +1,5 @@
 import AbstractGridTableCommand from "./AbstractGridTableCommand";
 import nthIndexOf from "../common/NthIndexOf";
-import { Insert, Replacement } from "./AbstractCommand";
 
 export default class CellNewlineCommand
     extends AbstractGridTableCommand
@@ -14,15 +13,19 @@ export default class CellNewlineCommand
         if (this.atStartOfTable(line))
         {
             // only insert newline
-            this.makeInserts(
-                new Insert(line, 0, this.eol()));
+            this.newEdit()
+                .insert(line, 0, this.eol())
+                .complete();
 
             return;
         }
 
         let activeCol = this.activeColumn(true);
 
-        let promise: PromiseLike<boolean>;
+        const edit = this.newEdit();
+
+        // get cell lines
+        const cellLines: { start: number, end: number, text: string }[] = [];
 
         if (this.shouldInsertCellLine(line, activeCol))
         {
@@ -43,61 +46,45 @@ export default class CellNewlineCommand
                 }
             }
 
-            promise = this
-                // insert before separator
-                .makeInserts(
-                    new Insert(i, 0, cellLine))
-                // move cell contents down
-                .then(() =>
-                {
-                    const replacements: Replacement[] = [];
+            for (let j = line; j <= i; j++)
+            {
+                const text = this.editor.document.lineAt(j).text;
 
-                    const cellLines: { start: number, end: number, text: string }[] = [];
+                const columnChar = text.startsWith("|") ?
+                    "|" :
+                    "+";
 
-                    for (let j = line; j <= i; j++)
+                const start = nthIndexOf(text, columnChar, activeCol + 1) + 1;
+
+                const end = nthIndexOf(text, columnChar, activeCol + 2);
+
+                cellLines.push(
                     {
-                        const text = this.editor.document.lineAt(j).text;
+                        start: start,
+                        end: end,
+                        text: text.substring(start, end),
+                    });
+            }
 
-                        const columnChar = text.startsWith("|") ?
-                            "|" :
-                            "+";
+            // insert before separator
+            const lastCellLine = cellLines[cellLines.length - 2];
 
-                        const start = nthIndexOf(text, columnChar, activeCol + 1) + 1;
+            edit.insert(
+                i,
+                0,
+                cellLine.substring(0, lastCellLine.start) +
+                lastCellLine.text +
+                cellLine.substring(lastCellLine.end));
 
-                        const end = nthIndexOf(text, columnChar, activeCol + 2);
-
-                        cellLines.push(
-                            {
-                                start: start,
-                                end: end,
-                                text: text.substring(start, end),
-                            });
-                    }
-
-                    for (; i > line + 1; i--)
-                    {
-                        // move each line down
-                        replacements.push(
-                            new Replacement(i,
-                                cellLines[i - line].start,
-                                cellLines[i - line].end,
-                                cellLines[i - line - 1].text));
-                    }
-
-                    // blank the inserted line
-                    replacements.push(
-                        new Replacement(
-                            line + 1,
-                            cellLines[0].start,
-                            cellLines[0].end,
-                            " ".repeat(cellLines[0].end - cellLines[0].start)));
-
-                    return this.makeReplacements(...replacements);
-                });
-        }
-        else
-        {
-            promise = Promise.resolve(true);
+            // move cell contents down
+            for (--i; i > line + 1; i--)
+            {
+                edit.replace(
+                    i,
+                    cellLines[i - line].start,
+                    cellLines[i - line].end,
+                    cellLines[i - line - 1].text);
+            }
         }
 
         // check if we need to replace part of the current cell line
@@ -114,39 +101,50 @@ export default class CellNewlineCommand
 
             const end = nthIndexOf(text, "|", activeCol + 2);
 
-            const remainingCellLine = text
+            let remainingCellLine = text
                 .substring(start, end)
-                .trim();
+                .trimRight();
 
             if (remainingCellLine !== "")
             {
                 const cellStart = nthIndexOf(text, "|", activeCol + 1) + 2;
 
-                promise
+                // replace remaining cell line with spaces
+                // edit.replace(line, start, start + remainingCellLine.length, " ".repeat(remainingCellLine.length));
+
+                // // move remaining cell line to start of next cell line
+                // remainingCellLine = remainingCellLine.trim();
+                // edit.replace(line + 1, cellStart, cellStart + remainingCellLine.length, remainingCellLine);
+
+                // complete edit and update selection
+                edit
+                    .complete()
                     .then(() =>
                     {
-                        return this.makeReplacements(
-                            // replace remaining cell line with spaces
-                            new Replacement(line, start, start + remainingCellLine.length, " ".repeat(remainingCellLine.length)),
-                            // move remaining cell line to start of next cell line
-                            new Replacement(line + 1, cellStart, cellStart + remainingCellLine.length, remainingCellLine));
-                    })
-                    .then(() =>
-                    {
+                        // select start of next cell line
                         this.select(
                             line + 1,
                             cellStart);
-
-                        return true;
                     });
 
                 return;
             }
         }
 
-        // select blank cell line
-        promise.then(
-            () =>
+        if (cellLines.length > 0)
+        {
+            // blank the inserted line
+            edit.replace(
+                line + 1,
+                cellLines[0].start,
+                cellLines[0].end,
+                " ".repeat(cellLines[0].end - cellLines[0].start));
+        }
+
+        edit
+            .complete()
+            // select blank cell line
+            .then(() =>
             {
                 // get column start character
                 const text = this.editor

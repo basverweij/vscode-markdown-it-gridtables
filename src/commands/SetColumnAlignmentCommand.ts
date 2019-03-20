@@ -4,7 +4,6 @@ import ColumnAlignments from "../common/ColumnAlignments";
 import getTableStartLine from "../gridtables/GetTableStartLine";
 import getTableHeaderLine from "../gridtables/GetTableHeaderLine";
 import nthIndexOf from "../common/NthIndexOf";
-import { Replacement } from "./AbstractCommand";
 
 export default class SetColumnAlignmentCommand
     extends AbstractGridTableCommand
@@ -75,10 +74,10 @@ export default class SetColumnAlignmentCommand
             lineChar,
             this.alignment);
 
-        this.makeReplacements(
-            new Replacement(lineNumber, colStart + 1, colStart + 2, colAlignment[0]),
-            new Replacement(lineNumber, colEnd - 1, colEnd, colAlignment[1]),
-        );
+        this.newEdit()
+            .replace(lineNumber, colStart + 1, colStart + 2, colAlignment[0])
+            .replace(lineNumber, colEnd - 1, colEnd, colAlignment[1])
+            .complete();
     }
 }
 

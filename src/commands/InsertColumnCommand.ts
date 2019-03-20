@@ -1,7 +1,6 @@
 import AbstractInsertCommand from "./AbstractInsertCommand";
 import getTableStartLine from "../gridtables/GetTableStartLine";
 import nthIndexOf from "../common/NthIndexOf";
-import { Insert } from "./AbstractCommand";
 
 /**
  * The Insert Column Command inserts a new column into the
@@ -33,7 +32,7 @@ export default class InsertColumnCommand
             return;
         }
 
-        const inserts: Insert[] = [];
+        let edit = this.newEdit();
 
         let text: string;
 
@@ -68,14 +67,10 @@ export default class InsertColumnCommand
 
             if (c >= 0)
             {
-                inserts.push(
-                    new Insert(i, c, text));
+                edit.insert(i, c, text);
             }
         }
 
-        if (inserts.length > 0)
-        {
-            this.makeInserts(...inserts);
-        }
+        edit.complete();
     }
 }
