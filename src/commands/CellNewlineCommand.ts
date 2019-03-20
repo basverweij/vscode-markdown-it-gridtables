@@ -48,37 +48,41 @@ export default class CellNewlineCommand
             .lineAt(line)
             .text;
 
-        const start = this.position().character;
-
-        const end = nthIndexOf(text, "|", activeCol + 2) - 1;
-
-        const remainingCellLine = text
-            .substring(start, end)
-            .trim();
-
-        if (remainingCellLine !== "")
+        // only break cell lines
+        if (text.startsWith("|"))
         {
-            const cellStart = nthIndexOf(text, "|", activeCol + 1) + 2;
+            const start = this.position().character;
 
-            promise
-                .then(() =>
-                {
-                    return this.makeReplacements(
-                        // replace remaining cell line with spaces
-                        new Replacement(line, start, start + remainingCellLine.length, " ".repeat(remainingCellLine.length)),
-                        // move remaining cell line to start of next cell line
-                        new Replacement(line + 1, cellStart, cellStart + remainingCellLine.length, remainingCellLine));
-                })
-                .then(() =>
-                {
-                    this.select(
-                        line + 1,
-                        cellStart);
+            const end = nthIndexOf(text, "|", activeCol + 2) - 1;
 
-                    return true;
-                });
+            const remainingCellLine = text
+                .substring(start, end)
+                .trim();
 
-            return;
+            if (remainingCellLine !== "")
+            {
+                const cellStart = nthIndexOf(text, "|", activeCol + 1) + 2;
+
+                promise
+                    .then(() =>
+                    {
+                        return this.makeReplacements(
+                            // replace remaining cell line with spaces
+                            new Replacement(line, start, start + remainingCellLine.length, " ".repeat(remainingCellLine.length)),
+                            // move remaining cell line to start of next cell line
+                            new Replacement(line + 1, cellStart, cellStart + remainingCellLine.length, remainingCellLine));
+                    })
+                    .then(() =>
+                    {
+                        this.select(
+                            line + 1,
+                            cellStart);
+
+                        return true;
+                    });
+
+                return;
+            }
         }
 
         // select blank cell line
