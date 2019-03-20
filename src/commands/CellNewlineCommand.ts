@@ -26,15 +26,74 @@ export default class CellNewlineCommand
 
         if (this.shouldInsertCellLine(line, activeCol))
         {
-            // insert cell new line
+            // build empty cell line
             const cellLine = this.columnWidths
                 .map(w => "|" + " ".repeat(w - 1))
                 .join("") +
                 "|" +
                 this.eol();
 
-            promise = this.makeInserts(
-                new Insert(line + 1, 0, cellLine));
+            // find next separator
+            let i = line + 1;
+            for (; i < this.editor.document.lineCount; i++)
+            {
+                if (this.editor.document.lineAt(i).text.startsWith("+"))
+                {
+                    break;
+                }
+            }
+
+            promise = this
+                // insert before separator
+                .makeInserts(
+                    new Insert(i, 0, cellLine))
+                // move cell contents down
+                .then(() =>
+                {
+                    const replacements: Replacement[] = [];
+
+                    const cellLines: { start: number, end: number, text: string }[] = [];
+
+                    for (let j = line; j <= i; j++)
+                    {
+                        const text = this.editor.document.lineAt(j).text;
+
+                        const columnChar = text.startsWith("|") ?
+                            "|" :
+                            "+";
+
+                        const start = nthIndexOf(text, columnChar, activeCol + 1) + 1;
+
+                        const end = nthIndexOf(text, columnChar, activeCol + 2);
+
+                        cellLines.push(
+                            {
+                                start: start,
+                                end: end,
+                                text: text.substring(start, end),
+                            });
+                    }
+
+                    for (; i > line + 1; i--)
+                    {
+                        // move each line down
+                        replacements.push(
+                            new Replacement(i,
+                                cellLines[i - line].start,
+                                cellLines[i - line].end,
+                                cellLines[i - line - 1].text));
+                    }
+
+                    // blank the inserted line
+                    replacements.push(
+                        new Replacement(
+                            line + 1,
+                            cellLines[0].start,
+                            cellLines[0].end,
+                            " ".repeat(cellLines[0].end - cellLines[0].start)));
+
+                    return this.makeReplacements(...replacements);
+                });
         }
         else
         {
@@ -53,7 +112,7 @@ export default class CellNewlineCommand
         {
             const start = this.position().character;
 
-            const end = nthIndexOf(text, "|", activeCol + 2) - 1;
+            const end = nthIndexOf(text, "|", activeCol + 2);
 
             const remainingCellLine = text
                 .substring(start, end)
