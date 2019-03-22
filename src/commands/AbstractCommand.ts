@@ -88,9 +88,7 @@ class EditBuilder
     constructor(
         private editor: vscode.TextEditor
     )
-    {
-        console.log('-- starting edit --');
-    }
+    { }
 
     insert(
         line: number,
@@ -98,8 +96,6 @@ class EditBuilder
         text: string
     ): EditBuilder
     {
-        console.log(`   insert(${line}, ${character}, "${text}")`);
-
         this.edits.push(
             (editBuilder) => editBuilder.insert(
                 new vscode.Position(line, character),
@@ -115,8 +111,6 @@ class EditBuilder
         text: string
     ): EditBuilder
     {
-        console.log(`   replace(${line}, ${start}, ${end}, "${text}")`);
-
         this.edits.push(
             (editBuilder) => editBuilder.replace(
                 new vscode.Range(
@@ -129,8 +123,6 @@ class EditBuilder
 
     perform(): EditBuilder
     {
-        console.log('-- perform --');
-
         this.editTxs.push(this.edits);
 
         this.edits = [];
@@ -141,8 +133,6 @@ class EditBuilder
     complete(): Thenable<boolean>
     {
         this.perform();
-
-        console.log('-- completing edit --');
 
         if (this.editTxs.length === 0)
         {
@@ -172,8 +162,6 @@ class EditBuilder
         markAfter: boolean
     ): Thenable<boolean>
     {
-        console.log(`tx: count=${edits.length}, markBefore=${markBefore}, markAfter=${markAfter}`);
-
         return this.editor.edit(
             (editBuilder) => edits.forEach(
                 e => e(editBuilder)),
