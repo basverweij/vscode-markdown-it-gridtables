@@ -32,7 +32,7 @@ export default class InsertColumnCommand
             return;
         }
 
-        let edit = this.newEdit();
+        const edit = this.newEdit();
 
         let text: string;
 

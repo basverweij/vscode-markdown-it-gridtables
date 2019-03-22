@@ -47,7 +47,7 @@ export default class AbstractCommand
         snippet: string,
         line: number,
         character?: number
-    ): PromiseLike<boolean>
+    ): Thenable<boolean>
     {
         return this.editor.insertSnippet(
             new vscode.SnippetString(snippet),
@@ -81,12 +81,16 @@ type Edit = (editBuilder: vscode.TextEditorEdit) => void;
 
 class EditBuilder
 {
+    private editTxs: Edit[][] = [];
+
     private edits: Edit[] = [];
 
     constructor(
         private editor: vscode.TextEditor
     )
-    { }
+    {
+        console.log('-- starting edit --');
+    }
 
     insert(
         line: number,
@@ -94,6 +98,8 @@ class EditBuilder
         text: string
     ): EditBuilder
     {
+        console.log(`   insert(${line}, ${character}, "${text}")`);
+
         this.edits.push(
             (editBuilder) => editBuilder.insert(
                 new vscode.Position(line, character),
@@ -109,6 +115,8 @@ class EditBuilder
         text: string
     ): EditBuilder
     {
+        console.log(`   replace(${line}, ${start}, ${end}, "${text}")`);
+
         this.edits.push(
             (editBuilder) => editBuilder.replace(
                 new vscode.Range(
@@ -119,15 +127,59 @@ class EditBuilder
         return this;
     }
 
+    perform(): EditBuilder
+    {
+        console.log('-- perform --');
+
+        this.editTxs.push(this.edits);
+
+        this.edits = [];
+
+        return this;
+    }
+
     complete(): Thenable<boolean>
     {
-        if (this.edits.length === 0)
+        this.perform();
+
+        console.log('-- completing edit --');
+
+        if (this.editTxs.length === 0)
         {
             return Promise.resolve(true);
         }
 
+        let result = this.completeEditTx(
+            this.editTxs[0],
+            true,
+            this.editTxs.length === 1);
+
+        for (let i = 1; i < this.editTxs.length; i++)
+        {
+            result = result
+                .then(() => this.completeEditTx(
+                    this.editTxs[i],
+                    false,
+                    i === this.editTxs.length - 1));
+        }
+
+        return result;
+    }
+
+    private completeEditTx(
+        edits: Edit[],
+        markBefore: boolean,
+        markAfter: boolean
+    ): Thenable<boolean>
+    {
+        console.log(`tx: count=${edits.length}, markBefore=${markBefore}, markAfter=${markAfter}`);
+
         return this.editor.edit(
-            (editBuilder) => this.edits.forEach(
-                e => e(editBuilder)));
+            (editBuilder) => edits.forEach(
+                e => e(editBuilder)),
+            {
+                undoStopBefore: markBefore,
+                undoStopAfter: markAfter,
+            });
     }
 }

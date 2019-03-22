@@ -20,11 +20,10 @@ export default class CellNewlineCommand
             return;
         }
 
-        let activeCol = this.activeColumn(true);
+        const activeCol = this.activeColumn(true);
 
         const edit = this.newEdit();
 
-        // get cell lines
         const cellLines: { start: number, end: number, text: string }[] = [];
 
         if (this.shouldInsertCellLine(line, activeCol))
@@ -46,6 +45,7 @@ export default class CellNewlineCommand
                 }
             }
 
+            // get cell lines
             for (let j = line; j <= i; j++)
             {
                 const text = this.editor.document.lineAt(j).text;
@@ -76,6 +76,8 @@ export default class CellNewlineCommand
                 lastCellLine.text +
                 cellLine.substring(lastCellLine.end));
 
+            edit.perform();
+
             // move cell contents down
             for (--i; i > line + 1; i--)
             {
@@ -85,6 +87,15 @@ export default class CellNewlineCommand
                     cellLines[i - line].end,
                     cellLines[i - line - 1].text);
             }
+
+            // blank inserted line
+            edit.replace(
+                line + 1,
+                cellLines[1].start,
+                cellLines[1].end,
+                " ".repeat(cellLines[1].end - cellLines[1].start));
+
+            edit.perform();
         }
 
         // check if we need to replace part of the current cell line
@@ -110,11 +121,11 @@ export default class CellNewlineCommand
                 const cellStart = nthIndexOf(text, "|", activeCol + 1) + 2;
 
                 // replace remaining cell line with spaces
-                // edit.replace(line, start, start + remainingCellLine.length, " ".repeat(remainingCellLine.length));
+                edit.replace(line, start, start + remainingCellLine.length, " ".repeat(remainingCellLine.length));
 
-                // // move remaining cell line to start of next cell line
-                // remainingCellLine = remainingCellLine.trim();
-                // edit.replace(line + 1, cellStart, cellStart + remainingCellLine.length, remainingCellLine);
+                // move remaining cell line to start of next cell line
+                remainingCellLine = remainingCellLine.trim();
+                edit.replace(line + 1, cellStart, cellStart + remainingCellLine.length, remainingCellLine);
 
                 // complete edit and update selection
                 edit

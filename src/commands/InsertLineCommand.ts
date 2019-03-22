@@ -9,13 +9,16 @@ export default class InsertLineCommand
         const activeCol = this.activeColumn(true);
 
         // build snippet
-        const snippet =
-            "$0" +
+        let snippet =
             this.columnWidths
                 .map((w, i) => `| \$\{${((i - activeCol + this.columnWidths.length) % this.columnWidths.length) + 1}:${" ".repeat(w - 3)}\} `)
                 .join("") +
             "|" +
             this.eol();
+
+        // insert placeholder to return to after the snippet has been entered
+        // set this to the start of the active column (before the $1 placeholder)
+        snippet = snippet.replace("${1:", "$0${1:");
 
         // determine line
         const line = this
