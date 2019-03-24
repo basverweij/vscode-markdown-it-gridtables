@@ -24,7 +24,7 @@ export default class CellNewlineCommand
 
         const edit = this.newEdit();
 
-        if (this.shouldInsertCellLine(line, activeCol))
+        if (this.shouldInsertCellLine())
         {
             // get last cell line
             const lastCellLine = this.cellLines[this.cellLines.length - 2];

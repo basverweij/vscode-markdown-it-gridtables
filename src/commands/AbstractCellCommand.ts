@@ -60,36 +60,9 @@ export default abstract class AbstractCellCommand
 
     protected abstract internalCellExecute(): void;
 
-    protected shouldInsertCellLine(
-        line: number,
-        column: number
-    ): boolean
+    protected shouldInsertCellLine(): boolean
     {
-        if (line === this.editor.document.lineCount - 1)
-        {
-            // last line
-            return true;
-        }
-
-        const nextLine = this.editor
-            .document
-            .lineAt(line + 1)
-            .text;
-
-        if (!nextLine.startsWith("|"))
-        {
-            // next line is not a cell line
-            return true;
-        }
-
-        const nextCellLine = nextLine
-            .substring(
-                nthIndexOf(nextLine, "|", column + 1) + 1,
-                nthIndexOf(nextLine, "|", column + 2) - 1,
-            )
-            .trim();
-
-        // next line is not empty
-        return nextCellLine !== "";
+        return (this.cellLines.length === 2) || // directly above the separator
+            (this.cellLines[1].text.trim() !== ""); // next line is not empty
     }
 }
