@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 
-export default class AbstractCommand
+export default abstract class AbstractCommand
 {
     constructor(
         protected readonly editor: vscode.TextEditor)

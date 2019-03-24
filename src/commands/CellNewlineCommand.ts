@@ -1,99 +1,72 @@
-import AbstractGridTableCommand from "./AbstractGridTableCommand";
 import nthIndexOf from "../common/NthIndexOf";
+import AbstractCellCommand from "./AbstractCellCommand";
 
 export default class CellNewlineCommand
-    extends AbstractGridTableCommand
+    extends AbstractCellCommand
 {
-    protected internalExecute(): void
+    protected internalCellExecute(): void
     {
-        const line = this
-            .position()
-            .line;
-
-        if (this.atStartOfTable(line))
+        if (this.atStartOfTable())
         {
             // only insert newline
             this.newEdit()
-                .insert(line, 0, this.eol())
+                .insert(this.position().line, 0, this.eol())
                 .complete();
 
             return;
         }
 
+        const line = this
+            .position()
+            .line;
+
         const activeCol = this.activeColumn(true);
 
         const edit = this.newEdit();
 
-        const cellLines: { start: number, end: number, text: string }[] = [];
-
         if (this.shouldInsertCellLine(line, activeCol))
         {
-            // build empty cell line
-            const cellLine = this.columnWidths
-                .map(w => "|" + " ".repeat(w - 1))
-                .join("") +
-                "|" +
-                this.eol();
+            // get last cell line
+            const lastCellLine = this.cellLines[this.cellLines.length - 2];
 
-            // find next separator
-            let i = line + 1;
-            for (; i < this.editor.document.lineCount; i++)
+            // only insert a new line before the separator if the last cell line is not empty,
+            // or if we are on the list just before the separator
+            if ((lastCellLine.text.trim() !== "") ||
+                (this.cellLines.length === 2))
             {
-                if (this.editor.document.lineAt(i).text.startsWith("+"))
-                {
-                    break;
-                }
+                // build empty cell line
+                const cellLine = this.columnWidths
+                    .map(w => "|" + " ".repeat(w - 1))
+                    .join("") +
+                    "|" +
+                    this.eol();
+
+                edit.insert(
+                    this.separatorLine,
+                    0,
+                    cellLine.substring(0, lastCellLine.start) +
+                    lastCellLine.text + // include the last cell line when inserting
+                    cellLine.substring(lastCellLine.end));
+
+                edit.perform();
             }
-
-            // get cell lines
-            for (let j = line; j <= i; j++)
-            {
-                const text = this.editor.document.lineAt(j).text;
-
-                const columnChar = text.startsWith("|") ?
-                    "|" :
-                    "+";
-
-                const start = nthIndexOf(text, columnChar, activeCol + 1) + 1;
-
-                const end = nthIndexOf(text, columnChar, activeCol + 2);
-
-                cellLines.push(
-                    {
-                        start: start,
-                        end: end,
-                        text: text.substring(start, end),
-                    });
-            }
-
-            // insert before separator
-            const lastCellLine = cellLines[cellLines.length - 2];
-
-            edit.insert(
-                i,
-                0,
-                cellLine.substring(0, lastCellLine.start) +
-                lastCellLine.text +
-                cellLine.substring(lastCellLine.end));
-
-            edit.perform();
 
             // move cell contents down
-            for (--i; i > line + 1; i--)
+            for (let i = this.separatorLine - 1; i > line + 1; i--)
             {
                 edit.replace(
                     i,
-                    cellLines[i - line].start,
-                    cellLines[i - line].end,
-                    cellLines[i - line - 1].text);
+                    this.cellLines[i - line].start,
+                    this.cellLines[i - line].end,
+                    this.cellLines[i - line - 1].text);
             }
 
             // blank inserted line
             edit.replace(
                 line + 1,
-                cellLines[1].start,
-                cellLines[1].end,
-                " ".repeat(cellLines[1].end - cellLines[1].start));
+                this.cellLines[1].start,
+                this.cellLines[1].end,
+                " ".repeat(this.cellLines[1].text.length));
 
             edit.perform();
         }
@@ -142,16 +115,6 @@ export default class CellNewlineCommand
             }
         }
 
-        if (cellLines.length > 0)
-        {
-            // blank the inserted line
-            edit.replace(
-                line + 1,
-                cellLines[0].start,
-                cellLines[0].end,
-                " ".repeat(cellLines[0].end - cellLines[0].start));
-        }
-
         edit
             .complete()
             // select blank cell line
@@ -186,56 +149,23 @@ export default class CellNewlineCommand
             });
     }
 
-    private shouldInsertCellLine(
-        line: number,
-        activeCol: number
-    ): boolean
+    private atStartOfTable(): boolean
     {
-        if (line === this.editor.document.lineCount - 1)
-        {
-            // last line
-            return true;
-        }
+        const pos = this.position();
 
-        const nextLine = this.editor
-            .document
-            .lineAt(line + 1)
-            .text;
-
-        if (!nextLine.startsWith("|"))
-        {
-            // next line is not a cell line
-            return true;
-        }
-
-        const nextColumn = nextLine
-            .substring(
-                nthIndexOf(nextLine, "|", activeCol + 1) + 1,
-                nthIndexOf(nextLine, "|", activeCol + 2) - 1,
-            )
-            .trim();
-
-        // next line is not empty
-        return nextColumn !== "";
-    }
-
-    private atStartOfTable(
-        line: number
-    ): boolean
-    {
-        if (this.position().character > 0)
+        if (pos.character > 0)
         {
             // not a the beginning of a line
             return false;
         }
 
-        if (!this.editor.document.lineAt(line).text.startsWith("+"))
+        if (!this.editor.document.lineAt(pos.line).text.startsWith("+"))
         {
             // not a separator line
             return false;
         }
 
-        return (line === 0) || // first line in the document
-            !this.editor.document.lineAt(line - 1).text.startsWith("|"); // not a table line
+        return (pos.line === 0) || // first line in the document
+            !this.editor.document.lineAt(pos.line - 1).text.startsWith("|"); // not a table line
     }
 }

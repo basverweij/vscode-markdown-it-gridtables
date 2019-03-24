@@ -1,10 +1,10 @@
 import * as vscode from 'vscode';
-import AbstractCommand from "./AbstractCommand";
+import AbstractCellCommand from './AbstractCellCommand';
 
 export default class CellPasteCommand
-    extends AbstractCommand
+    extends AbstractCellCommand
 {
-    execute()
+    internalCellExecute(): void
     {
         const pos = this.position();
 
