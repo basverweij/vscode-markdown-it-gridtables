@@ -1,5 +1,6 @@
 import AbstractGridTableCommand from "./AbstractGridTableCommand";
 import nthIndexOf from "../common/NthIndexOf";
+import { EditBuilder } from "./AbstractCommand";
 
 export default abstract class AbstractCellCommand
     extends AbstractGridTableCommand
@@ -60,9 +61,33 @@ export default abstract class AbstractCellCommand
 
     protected abstract internalCellExecute(): void;
 
-    protected shouldInsertCellLine(): boolean
+    protected shouldInsertCellLines(
+        requiredLines: number = 1
+    ): number
     {
-        return (this.cellLines.length === 2) || // directly above the separator
-            (this.cellLines[1].text.trim() !== ""); // next line is not empty
+        if (this.cellLines.length === 2)
+        {
+            // directly above the separator line
+            return requiredLines;
+        }
+
+        for (let i = 1; (i < this.cellLines.length - 1) && requiredLines > 0; i++ && requiredLines--)
+        {
+            if (this.cellLines[i].text.trim() !== "")
+            {
+                // cell line is not empty
+                break;
+            }
+        }
+
+        return requiredLines;
+    }
+
+    protected insertCellLines(
+        edit: EditBuilder,
+        lines: number = 1
+    ): void
+    {
+        
     }
 }

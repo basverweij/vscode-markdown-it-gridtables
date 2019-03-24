@@ -79,7 +79,7 @@ export default abstract class AbstractCommand
 
 type Edit = (editBuilder: vscode.TextEditorEdit) => void;
 
-class EditBuilder
+export class EditBuilder
 {
     private editTxs: Edit[][] = [];
 

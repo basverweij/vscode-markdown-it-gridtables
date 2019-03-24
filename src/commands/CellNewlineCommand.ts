@@ -24,13 +24,13 @@ export default class CellNewlineCommand
 
         const edit = this.newEdit();
 
-        if (this.shouldInsertCellLine())
+        if (this.shouldInsertCellLines() === 1)
         {
             // get last cell line
             const lastCellLine = this.cellLines[this.cellLines.length - 2];
 
             // only insert a new line before the separator if the last cell line is not empty,
-            // or if we are on the list just before the separator
+            // or if we are on the line just before the separator
             if ((lastCellLine.text.trim() !== "") ||
                 (this.cellLines.length === 2))
             {
