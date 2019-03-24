@@ -23,6 +23,7 @@
 		"onCommand:markdownItGridTables.cellNewline",
 		"onCommand:markdownItGridTables.insertTable",
 		"onCommand:markdownItGridTables.toggleHeader",
+		"onCommand:markdownItGridTables.cellPaste",
 		"onCommand:markdownItGridTables.setColumnAlignmentLeft",
 		"onCommand:markdownItGridTables.setColumnAlignmentCenter",
 		"onCommand:markdownItGridTables.setColumnAlignmentRight",
@@ -83,6 +84,10 @@
 			{
 				"command": "markdownItGridTables.toggleHeader",
 				"title": "Toggle Header"
+			},
+			{
+				"command": "markdownItGridTables.cellPaste",
+				"title": "Paste Text into a Cell"
 			},
 			{
 				"command": "markdownItGridTables.setColumnAlignmentLeft",
@@ -153,6 +158,10 @@
 				},
 				{
 					"command": "markdownItGridTables.toggleHeader",
+					"when": "editorLangId == markdown"
+				},
+				{
+					"command": "markdownItGridTables.cellPaste",
 					"when": "editorLangId == markdown"
 				},
 				{
@@ -250,6 +259,11 @@
 				"when": "markdownItGridTables:inGridTable && editorTextFocus && !editorReadonly && !editorHasMultipleSelections"
 			},
 			{
+				"command": "markdownItGridTables.cellPaste",
+				"key": "ctrl+v",
+				"when": "markdownItGridTables:inGridTable && editorTextFocus && !editorReadonly && !editorHasMultipleSelections"
+			},
+			{
 				"command": "markdownItGridTables.setColumnAlignmentLeft",
 				"key": "ctrl+t ctrl+l",
 				"when": "markdownItGridTables:inGridTable && editorTextFocus && !editorReadonly && !editorHasMultipleSelections"
@@ -286,6 +300,6 @@
 		"@types/mocha": "^2.2.42"
 	},
 	"dependencies": {
-		"markdown-it-gridtables": "^0.1.0"
+		"markdown-it-gridtables": "^0.1.1"
 	}
 }
