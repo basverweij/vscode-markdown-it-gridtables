@@ -7,7 +7,7 @@ export default abstract class AbstractCellCommand
 {
     protected cellLines: { start: number, end: number, text: string }[] = [];
 
-    protected separatorLine: number = -1;
+    protected nextSeparatorLine: number = -1;
 
     protected internalExecute(): void
     {
@@ -18,10 +18,10 @@ export default abstract class AbstractCellCommand
         const activeCol = this.activeColumn(true);
 
         // find next separator line
-        this.separatorLine = line + 1;
-        for (; this.separatorLine < this.editor.document.lineCount; this.separatorLine++)
+        this.nextSeparatorLine = line + 1;
+        for (; this.nextSeparatorLine < this.editor.document.lineCount; this.nextSeparatorLine++)
         {
-            const text = this.editor.document.lineAt(this.separatorLine).text;
+            const text = this.editor.document.lineAt(this.nextSeparatorLine).text;
 
             if (text.startsWith("+"))
             {
@@ -36,7 +36,7 @@ export default abstract class AbstractCellCommand
         }
 
         // build cell lines
-        for (let i = line; i <= this.separatorLine; i++)
+        for (let i = line; i <= this.nextSeparatorLine; i++)
         {
             const text = this.editor.document.lineAt(i).text;
 
@@ -81,16 +81,12 @@ export default abstract class AbstractCellCommand
     }
 
     private shouldInsertCellLines(
-        requiredLines: number = 1
+        lines: number
     ): number
     {
-        if (this.cellLines.length === 2)
-        {
-            // directly above the separator line
-            // return requiredLines;
-        }
-
-        for (let i = this.cellLines.length - 2; i > 0 && requiredLines > 0; i-- && requiredLines--)
+        // check number of empty cell lines at the end of the cell, 
+        // excluding the last cell line which is the separator to the next row
+        for (let i = this.cellLines.length - 2; i > 0 && lines > 0; i-- && lines--)
         {
             if (this.cellLines[i].text.trim() !== "")
             {
@@ -99,60 +95,47 @@ export default abstract class AbstractCellCommand
             }
         }
 
-        return requiredLines;
+        return lines;
     }
 
     private insertCellLines(
         edit: EditBuilder,
-        lines: number = 1
+        lines: number
     ): void
     {
-        // for (let i = 0; lines > 0; i++)
-        // {
-        //     if (this.cellLines[this.cellLines.length - 2 - i].text.trim() !== "")
-        //     {
-        //         break;
-        //     }
-
-        //     lines--;
-        // }
+        // build empty cell line
+        const tableLine = this.columnWidths
+            .map(w => "|" + " ".repeat(w - 1))
+            .join("") +
+            "|" +
+            this.eol();
 
         for (let i = 0; i < lines; i++)
         {
             // get cell line
             const cellLine = this.cellLines[this.cellLines.length - 2 - i];
 
-            // only insert a new line if we are on the line just before the separator
-            // if (this.cellLines.length === 2)
-            // {
-            // build empty cell line
-            const tableLine = this.columnWidths
-                .map(w => "|" + " ".repeat(w - 1))
-                .join("") +
-                "|" +
-                this.eol();
-
+            // insert new table line, including the previous cell line 
             edit.insert(
-                this.separatorLine,
+                this.nextSeparatorLine,
                 0,
                 tableLine.substring(0, cellLine.start) +
-                cellLine.text + // include the last cell line when inserting
+                cellLine.text +
                 tableLine.substring(cellLine.end));
-
-            edit.perform();
-            // }
         }
+
+        edit.perform();
     }
 
     private moveCellLines(
         edit: EditBuilder,
-        lines: number = 1
+        lines: number // TODO actually support moving multiple lines
     ): void
     {
         const line = this.position().line;
 
         // move cell contents down
-        for (let i = this.separatorLine - 1; i > line + 1; i--)
+        for (let i = this.nextSeparatorLine - 1; i > line + 1; i--)
         {
             edit.replace(
                 i,
