@@ -24,52 +24,7 @@ export default class CellNewlineCommand
 
         const edit = this.newEdit();
 
-        if (this.shouldInsertCellLines() === 1)
-        {
-            // get last cell line
-            const lastCellLine = this.cellLines[this.cellLines.length - 2];
-
-            // only insert a new line before the separator if the last cell line is not empty,
-            // or if we are on the line just before the separator
-            if ((lastCellLine.text.trim() !== "") ||
-                (this.cellLines.length === 2))
-            {
-                // build empty cell line
-                const cellLine = this.columnWidths
-                    .map(w => "|" + " ".repeat(w - 1))
-                    .join("") +
-                    "|" +
-                    this.eol();
-
-                edit.insert(
-                    this.separatorLine,
-                    0,
-                    cellLine.substring(0, lastCellLine.start) +
-                    lastCellLine.text + // include the last cell line when inserting
-                    cellLine.substring(lastCellLine.end));
-
-                edit.perform();
-            }
-
-            // move cell contents down
-            for (let i = this.separatorLine - 1; i > line + 1; i--)
-            {
-                edit.replace(
-                    i,
-                    this.cellLines[i - line].start,
-                    this.cellLines[i - line].end,
-                    this.cellLines[i - line - 1].text);
-            }
-
-            // blank inserted line
-            edit.replace(
-                line + 1,
-                this.cellLines[1].start,
-                this.cellLines[1].end,
-                " ".repeat(this.cellLines[1].text.length));
-
-            edit.perform();
-        }
+        this.ensureBlankCellLines(edit, 1);
 
         // check if we need to replace part of the current cell line
         const text = this
@@ -81,37 +36,53 @@ export default class CellNewlineCommand
         // only break cell lines
         if (text.startsWith("|"))
         {
-            const start = this.position().character;
+            let start = this.position().character;
 
-            const end = nthIndexOf(text, "|", activeCol + 2);
-
-            let remainingCellLine = text
-                .substring(start, end)
-                .trimRight();
-
-            if (remainingCellLine !== "")
+            if (text.charAt(start) === "|")
             {
-                const cellStart = nthIndexOf(text, "|", activeCol + 1) + 2;
+                // we normalize character position at a cell separator as the next column,
+                // but we don't want to copy this separator
+                start++;
+            }
 
-                // replace remaining cell line with spaces
-                edit.replace(line, start, start + remainingCellLine.length, " ".repeat(remainingCellLine.length));
+            let end = nthIndexOf(text, "|", activeCol + 2);
 
-                // move remaining cell line to start of next cell line
-                remainingCellLine = remainingCellLine.trim();
-                edit.replace(line + 1, cellStart, cellStart + remainingCellLine.length, remainingCellLine);
+            if (text.charAt(end) === "|")
+            {
+                // don't copy the cell separator at the end of a cell
+                end--;
+            }
 
-                // complete edit and update selection
-                edit
-                    .complete()
-                    .then(() =>
-                    {
-                        // select start of next cell line
-                        this.select(
-                            line + 1,
-                            cellStart);
-                    });
+            if (end > start)
+            {
+                let remainingCellLine = text
+                    .substring(start, end)
+                    .trimRight();
 
-                return;
+                if (remainingCellLine !== "")
+                {
+                    const cellStart = nthIndexOf(text, "|", activeCol + 1) + 2;
+
+                    // replace remaining cell line with spaces
+                    edit.replace(line, start, start + remainingCellLine.length, " ".repeat(remainingCellLine.length));
+
+                    // move remaining cell line to start of next cell line
+                    remainingCellLine = remainingCellLine.trim();
+                    edit.replace(line + 1, cellStart, cellStart + remainingCellLine.length, remainingCellLine);
+
+                    // complete edit and update selection
+                    edit
+                        .complete()
+                        .then(() =>
+                        {
+                            // select start of next cell line
+                            this.select(
+                                line + 1,
+                                cellStart);
+                        });
+
+                    return;
+                }
             }
         }
 
