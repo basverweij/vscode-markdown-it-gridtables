@@ -15,6 +15,15 @@ export default class CellNewlineCommand
 
             return;
         }
+        else if (this.atEndOfTable())
+        {
+            // only insert newline
+            this.newEdit()
+                .insert(this.position().line, this.position().character, this.eol())
+                .complete();
+
+            return;
+        }
 
         const line = this
             .position()
@@ -90,5 +99,25 @@ export default class CellNewlineCommand
 
         return (pos.line === 0) || // first line in the document
             !this.editor.document.lineAt(pos.line - 1).text.startsWith("|"); // not a table line
+    }
+
+    private atEndOfTable(): boolean
+    {
+        const pos = this.position();
+
+        if (pos.character < this.editor.document.lineAt(pos.line).text.length - 1)
+        {
+            // not a the end of a line
+            return false;
+        }
+
+        if (!this.editor.document.lineAt(pos.line).text.startsWith("+"))
+        {
+            // not a separator line
+            return false;
+        }
+
+        return (pos.line === this.editor.document.lineCount - 1) || // last line in the document
+            !this.editor.document.lineAt(pos.line + 1).text.startsWith("|"); // not a table line
     }
 }

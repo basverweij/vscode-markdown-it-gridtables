@@ -36,7 +36,7 @@ export default abstract class AbstractCellCommand
         }
 
         // build cell lines
-        for (let i = line; i <= this.nextSeparatorLine; i++)
+        for (let i = line; i <= this.nextSeparatorLine && i < this.editor.document.lineCount; i++)
         {
             const text = this.editor.document.lineAt(i).text;
 
