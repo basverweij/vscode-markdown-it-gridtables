@@ -24,67 +24,7 @@ export default class CellNewlineCommand
 
         const edit = this.newEdit();
 
-        this.ensureBlankCellLines(edit, 1);
-
-        // check if we need to replace part of the current cell line
-        const text = this
-            .editor
-            .document
-            .lineAt(line)
-            .text;
-
-        // only break cell lines
-        if (text.startsWith("|"))
-        {
-            let start = this.position().character;
-
-            if (text.charAt(start) === "|")
-            {
-                // we normalize character position at a cell separator as the next column,
-                // but we don't want to copy this separator
-                start++;
-            }
-
-            let end = nthIndexOf(text, "|", activeCol + 2);
-
-            if (text.charAt(end) === "|")
-            {
-                // don't copy the cell separator at the end of a cell
-                end--;
-            }
-
-            if (end > start)
-            {
-                let remainingCellLine = text
-                    .substring(start, end)
-                    .trimRight();
-
-                if (remainingCellLine !== "")
-                {
-                    const cellStart = nthIndexOf(text, "|", activeCol + 1) + 2;
-
-                    // replace remaining cell line with spaces
-                    edit.replace(line, start, start + remainingCellLine.length, " ".repeat(remainingCellLine.length));
-
-                    // move remaining cell line to start of next cell line
-                    remainingCellLine = remainingCellLine.trim();
-                    edit.replace(line + 1, cellStart, cellStart + remainingCellLine.length, remainingCellLine);
-
-                    // complete edit and update selection
-                    edit
-                        .complete()
-                        .then(() =>
-                        {
-                            // select start of next cell line
-                            this.select(
-                                line + 1,
-                                cellStart);
-                        });
-
-                    return;
-                }
-            }
-        }
+        this.insertLines(edit, ["", ""]);
 
         edit
             .complete()
@@ -113,10 +53,22 @@ export default class CellNewlineCommand
                     activeCol + 2)
                     - 1;
 
-                this.select(
-                    line + 1,
-                    fromCharacter,
-                    toCharacter - fromCharacter);
+                if (text.substring(fromCharacter, toCharacter).trim() === "")
+                {
+                    // select inserted blank lines
+                    this.select(
+                        line + 1,
+                        fromCharacter,
+                        toCharacter - fromCharacter);
+                }
+                else
+                {
+                    // insert cursor on cell start
+                    this.select(
+                        line + 1,
+                        fromCharacter,
+                        0);
+                }
             });
     }
 
