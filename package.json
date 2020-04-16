@@ -1,305 +1,305 @@
 {
-	"name": "vscode-markdown-it-gridtables",
-	"displayName": "vscode-markdown-it-gridtables",
-	"description": "VS Code extension that adds support for Pandoc Grid Tables to the Markdown preview",
-	"version": "0.0.1",
-	"engines": {
-		"vscode": "^1.31.0"
-	},
-	"categories": [
-		"Other"
-	],
-	"activationEvents": [
-		"onCommand:markdownItGridTables.insertLineAbove",
-		"onCommand:markdownItGridTables.insertLineBelow",
-		"onCommand:markdownItGridTables.insertSeparatorAbove",
-		"onCommand:markdownItGridTables.insertSeparatorBelow",
-		"onCommand:markdownItGridTables.insertColumnLeft",
-		"onCommand:markdownItGridTables.insertColumnRight",
-		"onCommand:markdownItGridTables.cellTabPrevious",
-		"onCommand:markdownItGridTables.cellTabNext",
-		"onCommand:markdownItGridTables.cellPreviousLine",
-		"onCommand:markdownItGridTables.cellNextLine",
-		"onCommand:markdownItGridTables.cellNewline",
-		"onCommand:markdownItGridTables.insertTable",
-		"onCommand:markdownItGridTables.toggleHeader",
-		"onCommand:markdownItGridTables.cellPaste",
-		"onCommand:markdownItGridTables.setColumnAlignmentLeft",
-		"onCommand:markdownItGridTables.setColumnAlignmentCenter",
-		"onCommand:markdownItGridTables.setColumnAlignmentRight",
-		"onCommand:markdownItGridTables.setColumnAlignmentNone"
-	],
-	"main": "./out/extension.js",
-	"contributes": {
-		"markdown.markdownItPlugins": true,
-		"commands": [
-			{
-				"command": "markdownItGridTables.insertLineAbove",
-				"title": "Insert Line Above"
-			},
-			{
-				"command": "markdownItGridTables.insertLineBelow",
-				"title": "Insert Line Below"
-			},
-			{
-				"command": "markdownItGridTables.insertSeparatorAbove",
-				"title": "Insert Separator Above"
-			},
-			{
-				"command": "markdownItGridTables.insertSeparatorBelow",
-				"title": "Insert Separator Below"
-			},
-			{
-				"command": "markdownItGridTables.insertColumnLeft",
-				"title": "Insert Column Left"
-			},
-			{
-				"command": "markdownItGridTables.insertColumnRight",
-				"title": "Insert Column Right"
-			},
-			{
-				"command": "markdownItGridTables.cellTabPrevious",
-				"title": "Cell Tab Previous"
-			},
-			{
-				"command": "markdownItGridTables.cellTabNext",
-				"title": "Cell Tab Next"
-			},
-			{
-				"command": "markdownItGridTables.cellPreviousLine",
-				"title": "Cell Move to Previous Line"
-			},
-			{
-				"command": "markdownItGridTables.cellNextLine",
-				"title": "Cell Move to Next Line"
-			},
-			{
-				"command": "markdownItGridTables.cellNewline",
-				"title": "Insert Cell Newline"
-			},
-			{
-				"command": "markdownItGridTables.insertTable",
-				"title": "Insert Table"
-			},
-			{
-				"command": "markdownItGridTables.toggleHeader",
-				"title": "Toggle Header"
-			},
-			{
-				"command": "markdownItGridTables.cellPaste",
-				"title": "Paste Text into a Cell"
-			},
-			{
-				"command": "markdownItGridTables.setColumnAlignmentLeft",
-				"title": "Set Column Alignment: Left"
-			},
-			{
-				"command": "markdownItGridTables.setColumnAlignmentCenter",
-				"title": "Set Column Alignment: Center"
-			},
-			{
-				"command": "markdownItGridTables.setColumnAlignmentRight",
-				"title": "Set Column Alignment: Right"
-			},
-			{
-				"command": "markdownItGridTables.setColumnAlignmentNone",
-				"title": "Set Column Alignment: None"
-			}
-		],
-		"menus": {
-			"commandPalette": [
-				{
-					"command": "markdownItGridTables.insertLineAbove",
-					"when": "editorLangId == markdown"
-				},
-				{
-					"command": "markdownItGridTables.insertLineBelow",
-					"when": "editorLangId == markdown"
-				},
-				{
-					"command": "markdownItGridTables.insertSeparatorAbove",
-					"when": "editorLangId == markdown"
-				},
-				{
-					"command": "markdownItGridTables.insertSeparatorBelow",
-					"when": "editorLangId == markdown"
-				},
-				{
-					"command": "markdownItGridTables.insertColumnLeft",
-					"when": "editorLangId == markdown"
-				},
-				{
-					"command": "markdownItGridTables.insertColumnRight",
-					"when": "editorLangId == markdown"
-				},
-				{
-					"command": "markdownItGridTables.cellTabPrevious",
-					"when": "editorLangId == markdown"
-				},
-				{
-					"command": "markdownItGridTables.cellTabNext",
-					"when": "editorLangId == markdown"
-				},
-				{
-					"command": "markdownItGridTables.cellPreviousLine",
-					"when": "editorLangId == markdown"
-				},
-				{
-					"command": "markdownItGridTables.cellNextLine",
-					"when": "editorLangId == markdown"
-				},
-				{
-					"command": "markdownItGridTables.cellNewline",
-					"when": "editorLangId == markdown"
-				},
-				{
-					"command": "markdownItGridTables.insertTable",
-					"when": "editorLangId == markdown"
-				},
-				{
-					"command": "markdownItGridTables.toggleHeader",
-					"when": "editorLangId == markdown"
-				},
-				{
-					"command": "markdownItGridTables.cellPaste",
-					"when": "editorLangId == markdown"
-				},
-				{
-					"command": "markdownItGridTables.setColumnAlignmentLeft",
-					"when": "editorLangId == markdown"
-				},
-				{
-					"command": "markdownItGridTables.setColumnAlignmentCenter",
-					"when": "editorLangId == markdown"
-				},
-				{
-					"command": "markdownItGridTables.setColumnAlignmentRight",
-					"when": "editorLangId == markdown"
-				},
-				{
-					"command": "markdownItGridTables.setColumnAlignmentNone",
-					"when": "editorLangId == markdown"
-				}
-			]
-		},
-		"keybindings": [
-			{
-				"command": "markdownItGridTables.insertLineAbove",
-				"key": "ctrl+t shift+l",
-				"mac": "cmd+t shift+l",
-				"when": "markdownItGridTables:inGridTable && editorTextFocus && !editorReadonly && !editorHasMultipleSelections"
-			},
-			{
-				"command": "markdownItGridTables.insertLineBelow",
-				"key": "ctrl+t l",
-				"mac": "cmd+t l",
-				"when": "markdownItGridTables:inGridTable && editorTextFocus && !editorReadonly && !editorHasMultipleSelections"
-			},
-			{
-				"command": "markdownItGridTables.insertSeparatorAbove",
-				"key": "ctrl+t shift+s",
-				"mac": "cmd+t shift+s",
-				"when": "markdownItGridTables:inGridTable && editorTextFocus && !editorReadonly && !editorHasMultipleSelections"
-			},
-			{
-				"command": "markdownItGridTables.insertSeparatorBelow",
-				"key": "ctrl+t s",
-				"mac": "cmd+t s",
-				"when": "markdownItGridTables:inGridTable && editorTextFocus && !editorReadonly && !editorHasMultipleSelections"
-			},
-			{
-				"command": "markdownItGridTables.insertColumnLeft",
-				"key": "ctrl+t shift+c",
-				"mac": "cmd+t shift+c",
-				"when": "markdownItGridTables:inGridTable && editorTextFocus && !editorReadonly && !editorHasMultipleSelections"
-			},
-			{
-				"command": "markdownItGridTables.insertColumnRight",
-				"key": "ctrl+t c",
-				"mac": "cmd+t c",
-				"when": "markdownItGridTables:inGridTable && editorTextFocus && !editorReadonly && !editorHasMultipleSelections"
-			},
-			{
-				"command": "markdownItGridTables.cellTabPrevious",
-				"key": "alt+left",
-				"mac": "alt+left",
-				"when": "markdownItGridTables:inGridTable && editorTextFocus && !editorReadonly && !editorHasMultipleSelections"
-			},
-			{
-				"command": "markdownItGridTables.cellTabNext",
-				"key": "alt+right",
-				"mac": "alt+right",
-				"when": "markdownItGridTables:inGridTable && editorTextFocus && !editorReadonly && !editorHasMultipleSelections"
-			},
-			{
-				"command": "markdownItGridTables.cellPreviousLine",
-				"key": "shift+enter",
-				"mac": "shift+enter",
-				"when": "markdownItGridTables:inGridTable && editorTextFocus && !editorReadonly && !editorHasMultipleSelections"
-			},
-			{
-				"command": "markdownItGridTables.cellNextLine",
-				"key": "alt+enter",
-				"mac": "alt+enter",
-				"when": "markdownItGridTables:inGridTable && editorTextFocus && !editorReadonly && !editorHasMultipleSelections"
-			},
-			{
-				"command": "markdownItGridTables.cellNewline",
-				"key": "enter",
-				"when": "markdownItGridTables:inGridTable && editorTextFocus && !editorReadonly && !editorHasMultipleSelections"
-			},
-			{
-				"command": "markdownItGridTables.insertTable",
-				"key": "ctrl+t t",
-				"when": "!markdownItGridTables:inGridTable && editorTextFocus && !editorReadonly && !editorHasMultipleSelections"
-			},
-			{
-				"command": "markdownItGridTables.toggleHeader",
-				"key": "ctrl+t h",
-				"when": "markdownItGridTables:inGridTable && editorTextFocus && !editorReadonly && !editorHasMultipleSelections"
-			},
-			{
-				"command": "markdownItGridTables.cellPaste",
-				"key": "ctrl+v",
-				"when": "markdownItGridTables:inGridTable && editorTextFocus && !editorReadonly && !editorHasMultipleSelections"
-			},
-			{
-				"command": "markdownItGridTables.setColumnAlignmentLeft",
-				"key": "ctrl+t ctrl+l",
-				"when": "markdownItGridTables:inGridTable && editorTextFocus && !editorReadonly && !editorHasMultipleSelections"
-			},
-			{
-				"command": "markdownItGridTables.setColumnAlignmentCenter",
-				"key": "ctrl+t ctrl+c",
-				"when": "markdownItGridTables:inGridTable && editorTextFocus && !editorReadonly && !editorHasMultipleSelections"
-			},
-			{
-				"command": "markdownItGridTables.setColumnAlignmentRight",
-				"key": "ctrl+t ctrl+r",
-				"when": "markdownItGridTables:inGridTable && editorTextFocus && !editorReadonly && !editorHasMultipleSelections"
-			},
-			{
-				"command": "markdownItGridTables.setColumnAlignmentNone",
-				"key": "ctrl+t ctrl+n",
-				"when": "markdownItGridTables:inGridTable && editorTextFocus && !editorReadonly && !editorHasMultipleSelections"
-			}
-		]
-	},
-	"scripts": {
-		"vscode:prepublish": "npm run compile",
-		"compile": "tsc -p ./",
-		"watch": "tsc -watch -p ./",
-		"postinstall": "node ./node_modules/vscode/bin/install",
-		"test": "npm run compile && node ./node_modules/vscode/bin/test"
-	},
-	"devDependencies": {
-		"@types/mocha": "^2.2.42",
-		"@types/node": "^8.10.54",
-		"tslint": "^5.20.0",
-		"typescript": "^3.6.3",
-		"vscode": "^1.1.36"
-	},
-	"dependencies": {
-		"markdown-it-gridtables": "^0.2.0"
-	}
+    "name": "vscode-markdown-it-gridtables",
+    "displayName": "vscode-markdown-it-gridtables",
+    "description": "VS Code extension that adds support for Pandoc Grid Tables to the Markdown preview",
+    "version": "0.0.1",
+    "engines": {
+        "vscode": "^1.31.0"
+    },
+    "categories": [
+        "Other"
+    ],
+    "activationEvents": [
+        "onCommand:markdownItGridTables.insertLineAbove",
+        "onCommand:markdownItGridTables.insertLineBelow",
+        "onCommand:markdownItGridTables.insertSeparatorAbove",
+        "onCommand:markdownItGridTables.insertSeparatorBelow",
+        "onCommand:markdownItGridTables.insertColumnLeft",
+        "onCommand:markdownItGridTables.insertColumnRight",
+        "onCommand:markdownItGridTables.cellTabPrevious",
+        "onCommand:markdownItGridTables.cellTabNext",
+        "onCommand:markdownItGridTables.cellPreviousLine",
+        "onCommand:markdownItGridTables.cellNextLine",
+        "onCommand:markdownItGridTables.cellNewline",
+        "onCommand:markdownItGridTables.insertTable",
+        "onCommand:markdownItGridTables.toggleHeader",
+        "onCommand:markdownItGridTables.cellPaste",
+        "onCommand:markdownItGridTables.setColumnAlignmentLeft",
+        "onCommand:markdownItGridTables.setColumnAlignmentCenter",
+        "onCommand:markdownItGridTables.setColumnAlignmentRight",
+        "onCommand:markdownItGridTables.setColumnAlignmentNone"
+    ],
+    "main": "./out/extension.js",
+    "contributes": {
+        "markdown.markdownItPlugins": true,
+        "commands": [
+            {
+                "command": "markdownItGridTables.insertLineAbove",
+                "title": "Insert Line Above"
+            },
+            {
+                "command": "markdownItGridTables.insertLineBelow",
+                "title": "Insert Line Below"
+            },
+            {
+                "command": "markdownItGridTables.insertSeparatorAbove",
+                "title": "Insert Separator Above"
+            },
+            {
+                "command": "markdownItGridTables.insertSeparatorBelow",
+                "title": "Insert Separator Below"
+            },
+            {
+                "command": "markdownItGridTables.insertColumnLeft",
+                "title": "Insert Column Left"
+            },
+            {
+                "command": "markdownItGridTables.insertColumnRight",
+                "title": "Insert Column Right"
+            },
+            {
+                "command": "markdownItGridTables.cellTabPrevious",
+                "title": "Cell Tab Previous"
+            },
+            {
+                "command": "markdownItGridTables.cellTabNext",
+                "title": "Cell Tab Next"
+            },
+            {
+                "command": "markdownItGridTables.cellPreviousLine",
+                "title": "Cell Move to Previous Line"
+            },
+            {
+                "command": "markdownItGridTables.cellNextLine",
+                "title": "Cell Move to Next Line"
+            },
+            {
+                "command": "markdownItGridTables.cellNewline",
+                "title": "Insert Cell Newline"
+            },
+            {
+                "command": "markdownItGridTables.insertTable",
+                "title": "Insert Table"
+            },
+            {
+                "command": "markdownItGridTables.toggleHeader",
+                "title": "Toggle Header"
+            },
+            {
+                "command": "markdownItGridTables.cellPaste",
+                "title": "Paste Text into a Cell"
+            },
+            {
+                "command": "markdownItGridTables.setColumnAlignmentLeft",
+                "title": "Set Column Alignment: Left"
+            },
+            {
+                "command": "markdownItGridTables.setColumnAlignmentCenter",
+                "title": "Set Column Alignment: Center"
+            },
+            {
+                "command": "markdownItGridTables.setColumnAlignmentRight",
+                "title": "Set Column Alignment: Right"
+            },
+            {
+                "command": "markdownItGridTables.setColumnAlignmentNone",
+                "title": "Set Column Alignment: None"
+            }
+        ],
+        "menus": {
+            "commandPalette": [
+                {
+                    "command": "markdownItGridTables.insertLineAbove",
+                    "when": "editorLangId == markdown"
+                },
+                {
+                    "command": "markdownItGridTables.insertLineBelow",
+                    "when": "editorLangId == markdown"
+                },
+                {
+                    "command": "markdownItGridTables.insertSeparatorAbove",
+                    "when": "editorLangId == markdown"
+                },
+                {
+                    "command": "markdownItGridTables.insertSeparatorBelow",
+                    "when": "editorLangId == markdown"
+                },
+                {
+                    "command": "markdownItGridTables.insertColumnLeft",
+                    "when": "editorLangId == markdown"
+                },
+                {
+                    "command": "markdownItGridTables.insertColumnRight",
+                    "when": "editorLangId == markdown"
+                },
+                {
+                    "command": "markdownItGridTables.cellTabPrevious",
+                    "when": "editorLangId == markdown"
+                },
+                {
+                    "command": "markdownItGridTables.cellTabNext",
+                    "when": "editorLangId == markdown"
+                },
+                {
+                    "command": "markdownItGridTables.cellPreviousLine",
+                    "when": "editorLangId == markdown"
+                },
+                {
+                    "command": "markdownItGridTables.cellNextLine",
+                    "when": "editorLangId == markdown"
+                },
+                {
+                    "command": "markdownItGridTables.cellNewline",
+                    "when": "editorLangId == markdown"
+                },
+                {
+                    "command": "markdownItGridTables.insertTable",
+                    "when": "editorLangId == markdown"
+                },
+                {
+                    "command": "markdownItGridTables.toggleHeader",
+                    "when": "editorLangId == markdown"
+                },
+                {
+                    "command": "markdownItGridTables.cellPaste",
+                    "when": "editorLangId == markdown"
+                },
+                {
+                    "command": "markdownItGridTables.setColumnAlignmentLeft",
+                    "when": "editorLangId == markdown"
+                },
+                {
+                    "command": "markdownItGridTables.setColumnAlignmentCenter",
+                    "when": "editorLangId == markdown"
+                },
+                {
+                    "command": "markdownItGridTables.setColumnAlignmentRight",
+                    "when": "editorLangId == markdown"
+                },
+                {
+                    "command": "markdownItGridTables.setColumnAlignmentNone",
+                    "when": "editorLangId == markdown"
+                }
+            ]
+        },
+        "keybindings": [
+            {
+                "command": "markdownItGridTables.insertLineAbove",
+                "key": "ctrl+t shift+l",
+                "mac": "cmd+t shift+l",
+                "when": "markdownItGridTables:inGridTable && editorTextFocus && !editorReadonly && !editorHasMultipleSelections"
+            },
+            {
+                "command": "markdownItGridTables.insertLineBelow",
+                "key": "ctrl+t l",
+                "mac": "cmd+t l",
+                "when": "markdownItGridTables:inGridTable && editorTextFocus && !editorReadonly && !editorHasMultipleSelections"
+            },
+            {
+                "command": "markdownItGridTables.insertSeparatorAbove",
+                "key": "ctrl+t shift+s",
+                "mac": "cmd+t shift+s",
+                "when": "markdownItGridTables:inGridTable && editorTextFocus && !editorReadonly && !editorHasMultipleSelections"
+            },
+            {
+                "command": "markdownItGridTables.insertSeparatorBelow",
+                "key": "ctrl+t s",
+                "mac": "cmd+t s",
+                "when": "markdownItGridTables:inGridTable && editorTextFocus && !editorReadonly && !editorHasMultipleSelections"
+            },
+            {
+                "command": "markdownItGridTables.insertColumnLeft",
+                "key": "ctrl+t shift+c",
+                "mac": "cmd+t shift+c",
+                "when": "markdownItGridTables:inGridTable && editorTextFocus && !editorReadonly && !editorHasMultipleSelections"
+            },
+            {
+                "command": "markdownItGridTables.insertColumnRight",
+                "key": "ctrl+t c",
+                "mac": "cmd+t c",
+                "when": "markdownItGridTables:inGridTable && editorTextFocus && !editorReadonly && !editorHasMultipleSelections"
+            },
+            {
+                "command": "markdownItGridTables.cellTabPrevious",
+                "key": "alt+left",
+                "mac": "alt+left",
+                "when": "markdownItGridTables:inGridTable && editorTextFocus && !editorReadonly && !editorHasMultipleSelections"
+            },
+            {
+                "command": "markdownItGridTables.cellTabNext",
+                "key": "alt+right",
+                "mac": "alt+right",
+                "when": "markdownItGridTables:inGridTable && editorTextFocus && !editorReadonly && !editorHasMultipleSelections"
+            },
+            {
+                "command": "markdownItGridTables.cellPreviousLine",
+                "key": "shift+enter",
+                "mac": "shift+enter",
+                "when": "markdownItGridTables:inGridTable && editorTextFocus && !editorReadonly && !editorHasMultipleSelections"
+            },
+            {
+                "command": "markdownItGridTables.cellNextLine",
+                "key": "alt+enter",
+                "mac": "alt+enter",
+                "when": "markdownItGridTables:inGridTable && editorTextFocus && !editorReadonly && !editorHasMultipleSelections"
+            },
+            {
+                "command": "markdownItGridTables.cellNewline",
+                "key": "enter",
+                "when": "markdownItGridTables:inGridTable && editorTextFocus && !editorReadonly && !editorHasMultipleSelections"
+            },
+            {
+                "command": "markdownItGridTables.insertTable",
+                "key": "ctrl+t t",
+                "when": "!markdownItGridTables:inGridTable && editorTextFocus && !editorReadonly && !editorHasMultipleSelections"
+            },
+            {
+                "command": "markdownItGridTables.toggleHeader",
+                "key": "ctrl+t h",
+                "when": "markdownItGridTables:inGridTable && editorTextFocus && !editorReadonly && !editorHasMultipleSelections"
+            },
+            {
+                "command": "markdownItGridTables.cellPaste",
+                "key": "ctrl+v",
+                "when": "markdownItGridTables:inGridTable && editorTextFocus && !editorReadonly && !editorHasMultipleSelections"
+            },
+            {
+                "command": "markdownItGridTables.setColumnAlignmentLeft",
+                "key": "ctrl+t ctrl+l",
+                "when": "markdownItGridTables:inGridTable && editorTextFocus && !editorReadonly && !editorHasMultipleSelections"
+            },
+            {
+                "command": "markdownItGridTables.setColumnAlignmentCenter",
+                "key": "ctrl+t ctrl+c",
+                "when": "markdownItGridTables:inGridTable && editorTextFocus && !editorReadonly && !editorHasMultipleSelections"
+            },
+            {
+                "command": "markdownItGridTables.setColumnAlignmentRight",
+                "key": "ctrl+t ctrl+r",
+                "when": "markdownItGridTables:inGridTable && editorTextFocus && !editorReadonly && !editorHasMultipleSelections"
+            },
+            {
+                "command": "markdownItGridTables.setColumnAlignmentNone",
+                "key": "ctrl+t ctrl+n",
+                "when": "markdownItGridTables:inGridTable && editorTextFocus && !editorReadonly && !editorHasMultipleSelections"
+            }
+        ]
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./",
+        "test": "npm run compile && node ./node_modules/vscode/bin/test"
+    },
+    "devDependencies": {
+        "@types/mocha": "^2.2.42",
+        "@types/node": "^8.10.60",
+        "@types/vscode": "^1.31.0",
+        "tslint": "^5.20.1",
+        "typescript": "^3.8.3",
+        "vscode-test": "^1.3.0"
+    },
+    "dependencies": {
+        "markdown-it-gridtables": "^0.2.0"
+    }
 }
