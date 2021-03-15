@@ -1,13 +1,23 @@
 {
     "name": "vscode-markdown-it-gridtables",
-    "displayName": "vscode-markdown-it-gridtables",
+    "displayName": "Pandoc Grid Tables support for Markdown",
     "description": "VS Code extension that adds support for Pandoc Grid Tables to the Markdown preview",
-    "version": "0.0.1",
+    "version": "0.1.0",
+    "publisher": "basverweij",
+    "repository": {
+        "url": "https://github.com/basverweij/vscode-markdown-it-gridtables"
+    },
     "engines": {
-        "vscode": "^1.31.0"
+        "vscode": "^1.44.0"
     },
     "categories": [
+        "Formatters",
         "Other"
+    ],
+    "keywords": [
+        "pandoc",
+        "grid tables",
+        "markdown"
     ],
     "activationEvents": [
         "onCommand:markdownItGridTables.insertLineAbove",
